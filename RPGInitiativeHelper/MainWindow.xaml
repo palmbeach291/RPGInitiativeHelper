@@ -8,20 +8,21 @@
         Title="RPGInitiativeHelper" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <!-- Menüleiste -->
-            <RowDefinition Height="*"/>
-            <!-- Liste und Infos -->
             <RowDefinition Height="Auto"/>
+            <!-- Liste und Infos -->
+            <RowDefinition Height="*"/>
             <!-- Eingabe-Button -->
             <RowDefinition Height="Auto"/>
             <!-- Infos aus Labels -->
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!-- Menüleiste -->
         <Menu Grid.Row="0">
             <!-- Kampf-Gruppe -->
             <MenuItem Header="Kampf">
-                <MenuItem Header="Neuer Kampf"/>
+                <MenuItem Header="Neuer Kampf" Click="NeueDatei_Click"/>
                 <MenuItem Header="Restart Kampf"/>
                 <MenuItem Header="Kampf Speichern"/>
             </MenuItem>
@@ -34,33 +35,73 @@
             </MenuItem>
         </Menu>
 
+        <!-- Main Area -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <!-- Listen-Spalte -->
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
-                <!-- Infos-Spalte -->
             </Grid.ColumnDefinitions>
 
-            <!-- Definieren Sie hier Ihre Liste und Infos -->
+            <!-- Fighter Area -->
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="+" Click="AddNewFighter_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                    <!-- Button zum Entfernen -->
+                    <Button Grid.Column="1" Content="-" Click="RemoveFighter_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                </Grid>
+
+                <ListView x:Name="fighterListView" Grid.Row="1" ItemsSource="{Binding ActiveCombat.Combatants}" SelectionMode="Single">
+                    <!-- Hier definieren Sie das Aussehen Ihrer Listenelemente -->
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Definieren Sie hier, wie jedes Element in der Liste angezeigt werden soll -->
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!--Detail Area-->
+            <Grid Grid.Column="1">
+
+            </Grid>
         </Grid>
 
-        <Grid Grid.Row="2" Grid.ColumnSpan="2"  HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid Grid.Row="2">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="&#x2190;" Click="LastPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                <Button Grid.Column="1" Content="Start" Click="StartFight_Click" Width="35" Height="25" Margin="5,5,5,5"/>
+                <Button Grid.Column="2" Content="&#x2192;" Click="NextPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+            </Grid>
         </Grid>
 
-        <Grid x:Name="lRunde" Grid.Row="3"  HorizontalAlignment="left" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Width="Auto">
+        <!-- Infos aus Labels -->
+        <Grid x:Name="lRunde" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
+
             <Label Grid.Column="0" HorizontalAlignment="Left">Runde:</Label>
-            <Label Grid.Column="1" HorizontalAlignment="Left">1</Label>
+            <Label x:Name="LTurnCounter" Grid.Column="1" HorizontalAlignment="Left">1</Label>
             <Label Grid.Column="2" HorizontalAlignment="Left">Phase:</Label>
-            <Label Grid.Column="3" HorizontalAlignment="Left">1</Label>
+            <Label x:Name="LPhaseCounter" Grid.Column="3" HorizontalAlignment="Left">1</Label>
         </Grid>
     </Grid>
-
 </Window>

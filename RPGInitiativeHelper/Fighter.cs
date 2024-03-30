@@ -1,73 +1,35 @@
-﻿namespace RPGInitiativeHelper
+﻿using System.ComponentModel;
+using System.Xml.Linq;
+
+namespace RPGInitiativeHelper
 {
     internal class Fighter
     {
-        public string Name { set; get; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
         public string Note { set; get; }
-        public int Initiative
-        {
-            set
-            {
-                Initiative += value;
-                if (Initiative < 0)
-                    Initiative = 0;
-            }
-            get
-            {
-                return Initiative;
-            }
-        }
-        public int Life
-        {
-            set
-            {
-                Life += value;
-                if (value < 0)
-                    Alive = false;
-                else if (Life > MaxLife)
-                    Life = MaxLife;
-            }
-            get
-            {
-                return Life;
-            }
-        }
+        public int Initiative { set; get; }
+        public int Life { set; get; }
         public int MaxLife { set; get; }
-        public int Mana
-        {
-            set
-            {
-                Mana += value;
-                if (value < 0)
-                    Mana = 0;
-                else if (Mana > MaxMana)
-                    Mana = MaxMana;
-            }
-            get
-            {
-                return Mana;
-            }
-        }
+        public int Mana { set; get; }
         public int MaxMana { set; get; }
-        public int Karma
-        {
-            set
-            {
-                Karma += value;
-                if (value < 0)
-                    Karma = 0;
-                else if (Karma > MaxKarma)
-                    Karma = MaxKarma;
-            }
-            get
-            {
-                return Karma;
-            }
-        }
+        public int Karma { set; get; }
         public int MaxKarma { set; get; }
         public bool Alive = true;
 
-        public Fighter(string name, int initiative, int maxLife, int maxMana, string note = "")
+        public Fighter(string name, int initiative, int maxLife, int maxMana = 0, int maxKarma = 0, string note = "")
         {
             Name = name;
             Initiative = initiative;
@@ -75,7 +37,12 @@
             Life = maxLife;
             MaxMana = maxMana;
             Mana = maxMana;
+            MaxKarma = maxKarma;
             Note = note;
+        }
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
