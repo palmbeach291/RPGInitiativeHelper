@@ -1,24 +1,11 @@
 ﻿using System.ComponentModel;
-using System.Xml.Linq;
 
 namespace RPGInitiativeHelper
 {
     internal class Fighter
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set
-            {
-                if (name != value)
-                {
-                    name = value;
-                    OnPropertyChanged(nameof(Name));
-                }
-            }
-        }
+        public string Name { set; get; }
         public string Note { set; get; }
         public int Initiative { set; get; }
         public int Life { set; get; }
@@ -27,6 +14,15 @@ namespace RPGInitiativeHelper
         public int MaxMana { set; get; }
         public int Karma { set; get; }
         public int MaxKarma { set; get; }
+        public string Display
+        {
+            get
+            {
+                string retVal = "";
+                retVal = Initiative.ToString() + " " + Name + " " + Life.ToString() + "/" + MaxLife.ToString();
+                return retVal;
+            }
+        }
         public bool Alive = true;
 
         public Fighter(string name, int initiative, int maxLife, int maxMana = 0, int maxKarma = 0, string note = "")
@@ -43,6 +39,25 @@ namespace RPGInitiativeHelper
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void GetHeal(int healing = 1)
+        {
+            if (MaxLife < Life + healing)
+                Life = MaxLife;
+            else
+                Life += healing;
+
+            if(!Alive && Life >= 0)
+                Alive= true;
+        }
+
+        public void GetDamage(int damage = 1)
+        {
+            Life -= damage;
+
+            if (Alive && Life < 0)
+                Alive = false;
         }
     }
 }

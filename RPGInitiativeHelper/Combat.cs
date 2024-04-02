@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace RPGInitiativeHelper
 {
@@ -48,6 +49,31 @@ namespace RPGInitiativeHelper
                 Turn++;
                 InitiavePhase = getStartInitiavePhase();
             }
+        }
+
+        public void addFighter(string name = "Kämpfer")
+        {
+            int count = 0;
+            string newName = name;
+
+            while (fighterContained(newName))
+            {
+                newName = name + "_" + count.ToString();
+                count++;
+            }
+
+            Combatants.Add(new Fighter(newName,1,1));
+        }
+
+        public bool fighterContained(string name)
+        {
+            bool retval = false;
+
+            foreach(Fighter f in Combatants)
+                if(f.Name==name)
+                    retval = true;
+
+            return retval;
         }
     }
 }

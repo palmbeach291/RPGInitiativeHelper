@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RPGInitiativeHelper"
         mc:Ignorable="d"
-        Title="RPGInitiativeHelper" Height="450" Width="800">
+        Title="RPGInitiativeHelper" Height="550" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <!-- Menüleiste -->
@@ -64,7 +64,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <!-- Definieren Sie hier, wie jedes Element in der Liste angezeigt werden soll -->
-                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="{Binding Display}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -72,6 +72,43 @@
 
             <!--Detail Area-->
             <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Margin="10,10,0,0">Name</Label>
+                <TextBox x:Name="TB_Name" Grid.Row="1" Width="Auto" Margin="10,0,10,10" LostFocus="TB_Name_LostFocus" HorizontalAlignment="Left" />
+                <Label Grid.Row="2" Margin="10,10,0,0">Initiative</Label>
+                <TextBox x:Name="TB_Initiative" Grid.Row="3" Width="Auto" Margin="10,0,10,10" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Initiative_LostFocus"/>
+                <Label Grid.Row="4" Margin="10,10,0,0">Leben</Label>
+                <Grid Grid.Row="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="TB_Current_Life" Grid.Column="0" Margin="10,5,0,10" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Current_Life_LostFocus"/>
+                    <Label Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="20">/</Label>
+                    <TextBox x:Name="TB_Max_Life" Grid.Column="2" Margin="0,5,0,10"  HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Max_Life_LostFocus"/>
+                </Grid>
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="+1LeP" Click="HealOneLife_Click" Width="40" Height="25" Margin="10,5,5,5"/>
+                    <Button Grid.Column="1" Content="-1LeP" Click="GetOneDamage_Click" Width="40" Height="25" Margin="10,5,5,5"/>
+                </Grid>
+
+                <TextBox x:Name="TB_Notes" Grid.Row="7" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0,0.5" LostFocus="TB_Notes_LostFocus" TextWrapping="Wrap"/>
+
 
             </Grid>
         </Grid>
@@ -83,9 +120,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="&#x2190;" Click="LastPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
-                <Button Grid.Column="1" Content="Start" Click="StartFight_Click" Width="35" Height="25" Margin="5,5,5,5"/>
-                <Button Grid.Column="2" Content="&#x2192;" Click="NextPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                <Button x:Name="B_LastPhase" Grid.Column="0" Content="&#x2190;" Click="LastPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                <Button x:Name="B_StartFight" Grid.Column="1" Content="Start" Click="StartFight_Click" Width="35" Height="25" Margin="5,5,5,5"/>
+                <Button x:Name="B_NextPhase" Grid.Column="2" Content="&#x2192;" Click="NextPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
             </Grid>
         </Grid>
 
@@ -96,12 +133,16 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" HorizontalAlignment="Left">Runde:</Label>
             <Label x:Name="LTurnCounter" Grid.Column="1" HorizontalAlignment="Left">1</Label>
-            <Label Grid.Column="2" HorizontalAlignment="Left">Phase:</Label>
+            <Label Grid.Column="2" HorizontalAlignment="Left">Initiative Phase:</Label>
             <Label x:Name="LPhaseCounter" Grid.Column="3" HorizontalAlignment="Left">1</Label>
+            <Label Grid.Column="4" HorizontalAlignment="Left">Aktueller Kämpfer:</Label>
+            <Label x:Name="LCurrentFighter" Grid.Column="5" HorizontalAlignment="Left">1</Label>
         </Grid>
     </Grid>
 </Window>
