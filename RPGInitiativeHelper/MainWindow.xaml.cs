@@ -92,10 +92,6 @@ namespace RPGInitiativeHelper
             }
         }
 
-        private void LastPhase_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void StartFight_Click(object sender, RoutedEventArgs e)
         {
             HighestInitiative = Combatants[0].Initiative;
@@ -288,7 +284,6 @@ namespace RPGInitiativeHelper
         {
             bool fighterAvailable = Combatants.Count > 0;
 
-            B_LastPhase.IsEnabled = fighterAvailable;
             B_NextPhase.IsEnabled = fighterAvailable;
             B_StartFight.IsEnabled = fighterAvailable;
 

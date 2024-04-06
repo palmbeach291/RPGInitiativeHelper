@@ -118,11 +118,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <!-- <ColumnDefinition Width="Auto"/> -->
                 </Grid.ColumnDefinitions>
-                <Button x:Name="B_LastPhase" Grid.Column="0" Content="&#x2190;" Click="LastPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
-                <Button x:Name="B_StartFight" Grid.Column="1" Content="Start" Click="StartFight_Click" Width="35" Height="25" Margin="5,5,5,5"/>
-                <Button x:Name="B_NextPhase" Grid.Column="2" Content="&#x2192;" Click="NextPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                <!-- <Button x:Name="B_LastPhase" Grid.Column="0" Content="&#x2190;" Click="LastPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/> -->
+                <Button x:Name="B_StartFight" Grid.Column="0" Content="Start" Click="StartFight_Click" Width="35" Height="25" Margin="5,5,5,5"/>
+                <Button x:Name="B_NextPhase" Grid.Column="1" Content="&#x2192;" Click="NextPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
             </Grid>
         </Grid>
 
