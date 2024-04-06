@@ -59,12 +59,12 @@
                     <Button Grid.Column="1" Content="-" Click="RemoveFighter_Click" Width="25" Height="25" Margin="5,5,5,5"/>
                 </Grid>
 
-                <ListView x:Name="fighterListView" Grid.Row="1" ItemsSource="{Binding ActiveCombat.Combatants}" SelectionMode="Single">
+                <ListView x:Name="fighterListView" Grid.Row="1" ItemsSource="{Binding Combatants}" SelectionMode="Single">
                     <!-- Hier definieren Sie das Aussehen Ihrer Listenelemente -->
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <!-- Definieren Sie hier, wie jedes Element in der Liste angezeigt werden soll -->
-                            <TextBlock Text="{Binding Display}"/>
+                            <TextBlock Text="{Binding Display}" Background="{Binding Color}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

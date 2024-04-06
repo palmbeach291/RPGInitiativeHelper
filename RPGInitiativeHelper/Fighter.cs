@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows.Media;
 
 namespace RPGInitiativeHelper
 {
@@ -14,6 +15,7 @@ namespace RPGInitiativeHelper
         public int MaxMana { set; get; }
         public int Karma { set; get; }
         public int MaxKarma { set; get; }
+        public Status.StatusValue State { set; get; }
         public string Display
         {
             get
@@ -23,7 +25,24 @@ namespace RPGInitiativeHelper
                 return retVal;
             }
         }
-        public bool Alive = true;
+
+        public Brush Color
+        {
+            get { 
+                SolidColorBrush retVal = Brushes.White;
+
+                if (State == Status.StatusValue.Active)
+                    retVal = Brushes.LightGreen;
+                else if (State == Status.StatusValue.Done)
+                    retVal = Brushes.LightGray;
+                else if (State == Status.StatusValue.Downed)
+                    retVal = Brushes.Salmon;
+                else 
+                    retVal = Brushes.White;
+
+                return retVal;            
+            }
+        }
 
         public Fighter(string name, int initiative, int maxLife, int maxMana = 0, int maxKarma = 0, string note = "")
         {
@@ -35,6 +54,7 @@ namespace RPGInitiativeHelper
             Mana = maxMana;
             MaxKarma = maxKarma;
             Note = note;
+            State = Status.StatusValue.Standard;
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -48,16 +68,34 @@ namespace RPGInitiativeHelper
             else
                 Life += healing;
 
-            if(!Alive && Life >= 0)
-                Alive= true;
+            if(State == Status.StatusValue.Downed && Life >= 0)
+                State = Status.StatusValue.Done;
         }
 
         public void GetDamage(int damage = 1)
         {
             Life -= damage;
 
-            if (Alive && Life < 0)
-                Alive = false;
+            if (State != Status.StatusValue.Downed && Life < 0)
+                State = Status.StatusValue.Downed;
+        }
+    }
+
+    public struct Status
+    {
+        public enum StatusValue
+        {
+            Active,
+            Done,
+            Standard,
+            Downed
+        }
+
+        public StatusValue Value { get; }
+
+        public Status(StatusValue value)
+        {
+            Value = value;
         }
     }
 }

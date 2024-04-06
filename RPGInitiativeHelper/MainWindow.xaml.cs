@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace RPGInitiativeHelper
@@ -8,18 +9,17 @@ namespace RPGInitiativeHelper
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Combat ActiveCombat = new Combat();
         private int HighestInitiative = 0;
-        private int CurrentInitiative = 0;
         private int CurrentTurn = 0;
         private int CurrentFighterID = 0;
-        private int FighterCount = 0;
+        private List<Fighter> Combatants = new List<Fighter>();
+        private bool CombatStarted = false;
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = this;
-            fighterListView.ItemsSource = ActiveCombat.Combatants;
+            fighterListView.ItemsSource = Combatants;
             fighterListView.SelectionChanged += FighterListView_SelectionChanged;
             RefreshTurnLabels();
             RefreshPhaseButtons();
@@ -27,9 +27,12 @@ namespace RPGInitiativeHelper
 
         private void NewCombat()
         {
-            ActiveCombat = new Combat();
+            Combatants = new List<Fighter>();
+            fighterListView.ItemsSource = Combatants;
             RefreshTurnLabels();
             RefreshPhaseButtons();
+            refreshInitiative();
+            CombatStarted = false;
         }
 
         private void NeueDatei_Click(object sender, RoutedEventArgs e)
@@ -39,9 +42,29 @@ namespace RPGInitiativeHelper
 
         private void AddNewFighter_Click(object sender, RoutedEventArgs e)
         {
-            ActiveCombat.addFighter();
+            int count = 0;
+            string name = "Kämpfer";
+            string newName = name;
+
+            while (fighterContained(newName))
+            {
+                newName = name + "_" + count.ToString();
+                count++;
+            }
+
+            Combatants.Add(new Fighter(newName, 1, 1));
             RefreshPhaseButtons();
             refreshInitiative();
+        }
+        public bool fighterContained(string name)
+        {
+            bool retval = false;
+
+            foreach (Fighter f in Combatants)
+                if (f.Name == name)
+                    retval = true;
+
+            return retval;
         }
 
         private void RemoveFighter_Click(object sender, RoutedEventArgs e)
@@ -49,13 +72,21 @@ namespace RPGInitiativeHelper
             // Überprüfen Sie, ob ein Element ausgewählt ist
             if (fighterListView.SelectedItem != null)
             {
+                Fighter SelectedFighter = (Fighter)fighterListView.SelectedItem;
                 // Entfernen Sie das ausgewählte Element aus Ihrer Datenquelle
-                ActiveCombat.Combatants.Remove((Fighter)fighterListView.SelectedItem);
+                Combatants.Remove(SelectedFighter);
+                if (CombatStarted && (SelectedFighter.State == Status.StatusValue.Active || SelectedFighter.State == Status.StatusValue.Done))
+                    CurrentFighterID--;
+
                 TB_Name.Text = "";
                 TB_Initiative.Text = "";
                 TB_Current_Life.Text = "";
                 TB_Max_Life.Text = "";
                 TB_Notes.Text = "";
+
+                if (Combatants.Count == 0 && CombatStarted == true)
+                    NewCombat();
+
                 RefreshPhaseButtons();
                 refreshInitiative();
             }
@@ -67,12 +98,23 @@ namespace RPGInitiativeHelper
 
         private void StartFight_Click(object sender, RoutedEventArgs e)
         {
-            HighestInitiative = ActiveCombat.Combatants[0].Initiative;
-            CurrentInitiative = HighestInitiative;
+            HighestInitiative = Combatants[0].Initiative;
             CurrentTurn = 1;
-            FighterCount = ActiveCombat.Combatants.Count;
             fighterListView.SelectedItem = fighterListView.Items[0];
+            Fighter CurrentFighter = (Fighter)fighterListView.Items[0];
+            CurrentFighter.State = Status.StatusValue.Active;
+            CombatStarted = true;
+            refreshState();
             RefreshTurnLabels();
+        }
+
+        private void refreshState()
+        {
+            foreach (Fighter f in fighterListView.Items)
+            {
+                if (f.State != Status.StatusValue.Downed)
+                    f.State = Status.StatusValue.Standard;
+            }
         }
 
         private void RefreshTurnLabels()
@@ -87,20 +129,31 @@ namespace RPGInitiativeHelper
                 LCurrentFighter.Content = "";
 
             LTurnCounter.Content = CurrentTurn;
+            fighterListView.Items.Refresh();
         }
 
         private void NextPhase_Click(object sender, RoutedEventArgs e)
         {
-            CurrentFighterID++;
-
-            if (CurrentFighterID >= FighterCount)
+            if (CombatStarted)
             {
-                CurrentTurn++;
-                CurrentFighterID = 0;
-            }
+                Fighter lastFighter = (Fighter)fighterListView.Items[CurrentFighterID];
+                lastFighter.State = Status.StatusValue.Done;
+                CurrentFighterID++;
 
-            fighterListView.SelectedItem = fighterListView.Items[CurrentFighterID];
-            RefreshTurnLabels();
+                if (CurrentFighterID >= Combatants.Count)
+                {
+                    CurrentTurn++;
+                    CurrentFighterID = 0;
+                    refreshState();
+                }
+
+                Fighter CurrentFighter = (Fighter)fighterListView.Items[CurrentFighterID];
+                CurrentFighter.State = Status.StatusValue.Active;
+
+
+                fighterListView.SelectedItem = fighterListView.Items[CurrentFighterID];
+                RefreshTurnLabels();
+            }
         }
 
         private void FighterListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -204,7 +257,7 @@ namespace RPGInitiativeHelper
 
         private void refreshInitiative()
         {
-            ActiveCombat.Combatants.Sort((x, y) => y.Initiative.CompareTo(x.Initiative));
+            Combatants.Sort((x, y) => y.Initiative.CompareTo(x.Initiative));
             fighterListView.Items.Refresh();
         }
 
@@ -233,7 +286,7 @@ namespace RPGInitiativeHelper
 
         private void RefreshPhaseButtons()
         {
-            bool fighterAvailable = ActiveCombat.Combatants.Count > 0;
+            bool fighterAvailable = Combatants.Count > 0;
 
             B_LastPhase.IsEnabled = fighterAvailable;
             B_NextPhase.IsEnabled = fighterAvailable;
