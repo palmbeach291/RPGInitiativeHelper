@@ -1,6 +1,6 @@
 # RPGInitiativeHelper
 
-[German]
+German
 RPGInitiativeHelper ist eine Anwendung zur Verwaltung von Kampfinitiativen in Rollenspielen.
 
 ## Features
@@ -30,7 +30,7 @@ Beiträge sind willkommen! Bitte öffnen Sie ein Issue, um Fehler zu melden oder
 
 Dieses Projekt ist unter der MIT-Lizenz lizenziert.
 
-[English]
+English
 RPGInitiativeHelper is an application for managing combat initiatives in role-playing games.
 
 ## Features
