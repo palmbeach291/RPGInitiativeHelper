@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace RPGInitiativeHelper
 {
@@ -9,7 +10,6 @@ namespace RPGInitiativeHelper
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int HighestInitiative = 0;
         private int CurrentTurn = 0;
         private int CurrentFighterID = 0;
         private List<Fighter> Combatants = new List<Fighter>();
@@ -19,16 +19,15 @@ namespace RPGInitiativeHelper
         {
             InitializeComponent();
             DataContext = this;
-            fighterListView.ItemsSource = Combatants;
             fighterListView.SelectionChanged += FighterListView_SelectionChanged;
-            RefreshTurnLabels();
-            RefreshPhaseButtons();
+            NewCombat();
         }
 
         private void NewCombat()
         {
             Combatants = new List<Fighter>();
             fighterListView.ItemsSource = Combatants;
+            fighterMenu.Visibility = Visibility.Hidden;
             RefreshTurnLabels();
             RefreshPhaseButtons();
             refreshInitiative();
@@ -56,6 +55,7 @@ namespace RPGInitiativeHelper
             RefreshPhaseButtons();
             refreshInitiative();
         }
+
         public bool fighterContained(string name)
         {
             bool retval = false;
@@ -94,13 +94,12 @@ namespace RPGInitiativeHelper
 
         private void StartFight_Click(object sender, RoutedEventArgs e)
         {
-            HighestInitiative = Combatants[0].Initiative;
             CurrentTurn = 1;
             fighterListView.SelectedItem = fighterListView.Items[0];
             Fighter CurrentFighter = (Fighter)fighterListView.Items[0];
-            CurrentFighter.State = Status.StatusValue.Active;
             CombatStarted = true;
             refreshState();
+            CurrentFighter.State = Status.StatusValue.Active;
             RefreshTurnLabels();
         }
 
@@ -126,6 +125,39 @@ namespace RPGInitiativeHelper
 
             LTurnCounter.Content = CurrentTurn;
             fighterListView.Items.Refresh();
+        }
+
+        private void ConvertPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            Form_PlayerName form = new Form_PlayerName();
+            form.ShowDialog();
+            string playerName = form.PlayerName;
+            Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+
+            if (!string.IsNullOrEmpty(playerName))
+            {
+                selectedFighter.PlayerName= playerName;
+                RefreshPlayer();
+            }
+        }
+
+        private void RefreshPlayer()
+        {
+            Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+
+            if (selectedFighter != null)
+            {
+                if (selectedFighter.PlayerName.ToLower() == "npc")
+                {
+                    B_Player.Content = "NPC";
+                    B_Player.Background = Brushes.Chocolate;
+                }
+                else
+                {
+                    B_Player.Content = selectedFighter.PlayerName;
+                    B_Player.Background = Brushes.LightGreen;
+                }
+            }
         }
 
         private void NextPhase_Click(object sender, RoutedEventArgs e)
@@ -163,7 +195,12 @@ namespace RPGInitiativeHelper
                 TB_Max_Life.Text = selectedFighter.Life.ToString();
                 TB_Current_Life.Text = selectedFighter.MaxLife.ToString();
                 TB_Notes.Text = selectedFighter.Note;
+
+                fighterMenu.Visibility = Visibility.Visible;
+                RefreshPlayer();
             }
+            else
+                fighterMenu.Visibility = Visibility.Hidden;
         }
 
         private void TB_Name_LostFocus(object sender, RoutedEventArgs e)

@@ -1,0 +1,31 @@
+﻿<Window x:Class="RPGInitiativeHelper.Form_PlayerName"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RPGInitiativeHelper"
+        mc:Ignorable="d"
+        Title="Spieler Name" Height="110" Width="200" WindowStyle="None">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        
+        <Label Grid.Row="0" VerticalAlignment="Stretch" Background="DarkSlateGray" FontWeight="Bold" Foreground="White">Spieler</Label>
+        
+        <TextBox x:Name="TB_PlayerName" Grid.Row="1"  Margin="5"></TextBox>
+        
+        <Grid Grid.Row="2" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Click="OK_Click"  Margin="5">OK</Button>
+            <Button Grid.Column="1" Click="Cancel_Click" Margin="5">Abbrechen</Button>
+
+        </Grid>
+    </Grid>
+</Window>

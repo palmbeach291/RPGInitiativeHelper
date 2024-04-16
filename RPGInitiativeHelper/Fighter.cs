@@ -16,6 +16,8 @@ namespace RPGInitiativeHelper
         public int Karma { set; get; }
         public int MaxKarma { set; get; }
         public Status.StatusValue State { set; get; }
+        public string PlayerName { set; get; }
+
         public string Display
         {
             get
@@ -29,7 +31,7 @@ namespace RPGInitiativeHelper
         public Brush Color
         {
             get { 
-                SolidColorBrush retVal = Brushes.White;
+                SolidColorBrush retVal;
 
                 if (State == Status.StatusValue.Active)
                     retVal = Brushes.LightGreen;
@@ -44,7 +46,7 @@ namespace RPGInitiativeHelper
             }
         }
 
-        public Fighter(string name, int initiative, int maxLife, int maxMana = 0, int maxKarma = 0, string note = "")
+        public Fighter(string name, int initiative, int maxLife, string playerName = "NPC", int maxMana = 0, int maxKarma = 0, string note = "")
         {
             Name = name;
             Initiative = initiative;
@@ -54,6 +56,7 @@ namespace RPGInitiativeHelper
             Mana = maxMana;
             MaxKarma = maxKarma;
             Note = note;
+            PlayerName= playerName;
             State = Status.StatusValue.Standard;
         }
         protected virtual void OnPropertyChanged(string propertyName)
