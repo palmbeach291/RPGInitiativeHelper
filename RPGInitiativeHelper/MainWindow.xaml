@@ -7,33 +7,28 @@
         mc:Ignorable="d"
         Title="RPGInitiativeHelper" Height="400" Width="700"
         Icon="/RPGInitiativeHelper;component/Ressourcen/Icon_16x16.ico">
-    <Grid>
+    <Grid Background="LightGreen">
         <Grid.RowDefinitions>
-            <!-- Menüleiste -->
             <RowDefinition Height="Auto"/>
-            <!-- Liste und Infos -->
             <RowDefinition Height="*"/>
-            <!-- Eingabe-Button -->
             <RowDefinition Height="Auto"/>
-            <!-- Infos aus Labels -->
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Menüleiste -->
-        <Menu Grid.Row="0">
-            <!-- Kampf-Gruppe -->
-            <MenuItem Header="Kampf">
-                <MenuItem Header="Neuer Kampf" Click="NeueDatei_Click"/>
-                <MenuItem Header="Restart Kampf"/>
-                <MenuItem Header="Kampf Speichern"/>
-            </MenuItem>
-
-            <!-- Gruppen-Gruppe -->
-            <MenuItem Header="Gruppen">
-                <MenuItem Header="Lade Gruppe" Click="LoadGroup_Click"/>
-                <MenuItem Header="Gruppe Speichern" Click="SaveGroup_Click"/>
-            </MenuItem>
-        </Menu>
+        <ToolBar Grid.Row="0" Background="Green">
+            <Button Click="NeueDatei_Click" ToolTip="Neuer Kampf">
+                <Image Source="/RPGInitiativeHelper;component/Ressourcen/Icon_24x24_new.ico" Width="24" Height="24" />
+            </Button>
+            <Button Click="SaveGroup_Click" ToolTip="Speicher Spieler">
+                <Image Source="/RPGInitiativeHelper;component/Ressourcen/Group_24x24.ico" Width="24" Height="24" />
+            </Button>
+            <Button Click="SaveCombatants_Click" ToolTip="Speicher gesamte Liste">
+                <Image Source="/RPGInitiativeHelper;component/Ressourcen/Combat_24x24.ico" Width="24" Height="24" />
+            </Button>
+            <Button Click="LoadGroup_Click" ToolTip="Lade Gruppe">
+                <Image Source="/RPGInitiativeHelper;component/Ressourcen/Load_24x24.ico" Width="24" Height="24" />
+            </Button>
+        </ToolBar>
 
         <!-- Main Area -->
         <Grid Grid.Row="1">
@@ -56,9 +51,13 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Margin="5,5,0,5">Kämpfer</Label>
 
-                    <Button Grid.Column="1" Content="+" Click="AddNewFighter_Click" Width="25" Height="25" Margin="5,5,5,5"/>
-                    <!-- Button zum Entfernen -->
-                    <Button Grid.Column="2" Content="-" Click="RemoveFighter_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                    <Button Grid.Column="1"  Click="AddNewFighter_Click" Margin="5" ToolTip="Kämpfer hinzufügen">
+                        <Image Source="/RPGInitiativeHelper;component/Ressourcen/Add_24x24.ico" Width="24" Height="24"/>
+                    </Button>
+
+                    <Button Grid.Column="2"  Click="RemoveFighter_Click" Margin="5" ToolTip="Kämpfer entfernen">
+                        <Image Source="/RPGInitiativeHelper;component/Ressourcen/Minus_24x24.ico" Width="24" Height="24"/>
+                    </Button>
                 </Grid>
 
                 <ListView x:Name="fighterListView" Grid.Row="1" ItemsSource="{Binding Combatants}" SelectionMode="Single">
@@ -91,7 +90,7 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Margin="10,10,0,0">Name:</Label>
                     <TextBox x:Name="TB_Name" Grid.Column="1" Width="Auto" Margin="0,10,0,0" LostFocus="TB_Name_LostFocus" HorizontalAlignment="Left" />
-                    <Button Grid.Column="2" x:Name="B_Player" Margin="10,10,10,0" HorizontalAlignment="Right" Content="NPC" Background="LightGreen" Click="ConvertPlayer_Click"/>
+                    <Button Grid.Column="2" x:Name="B_Player" Margin="10,10,10,0" HorizontalAlignment="Right" Content="NPC" Background="LightGreen" Click="ConvertPlayer_Click" ToolTip=""/>
                 </Grid>
 
                 <Grid Grid.Row="1">
@@ -115,8 +114,12 @@
                     <TextBox x:Name="TB_Current_Life" Grid.Column="0" Margin="10,5,0,10" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Current_Life_LostFocus"/>
                     <Label Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="20">/</Label>
                     <TextBox x:Name="TB_Max_Life" Grid.Column="2" Margin="0,5,0,10"  HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Max_Life_LostFocus"/>
-                    <Button Grid.Column="3" Content="+1LeP" Click="HealOneLife_Click" Width="40" Height="25" Margin="10,5,5,5"/>
-                    <Button Grid.Column="4" Content="-1LeP" Click="GetOneDamage_Click" Width="40" Height="25" Margin="10,5,5,5"/>
+                    <Button Grid.Column="3" ToolTip="+1LeP" Click="HealOneLife_Click" Margin="10,5,5,5">
+                        <Image Source="/RPGInitiativeHelper;component/Ressourcen/Add1Leben.ico" Width="24" Height="24"/>
+                    </Button>
+                    <Button Grid.Column="4" ToolTip="-1LeP" Click="GetOneDamage_Click" Margin="10,5,5,5">
+                        <Image Source="/RPGInitiativeHelper;component/Ressourcen/Minus1Leben.ico" Width="24" Height="24"/>
+                    </Button>
                 </Grid>
 
                 <Label Grid.Column="1" Grid.Row="4" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="11">Notizen:</Label>
@@ -130,8 +133,12 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="B_StartFight" Grid.Column="0" Content="Start" Click="StartFight_Click" Width="35" Height="25" Margin="5,5,5,5"/>
-                <Button x:Name="B_NextPhase" Grid.Column="1" Content="&#x2192;" Click="NextPhase_Click" Width="25" Height="25" Margin="5,5,5,5"/>
+                <Button x:Name="B_StartFight" Grid.Column="0" Click="StartFight_Click" Margin="5" ToolTip="Kampf starten">
+                    <Image Source="/RPGInitiativeHelper;component/Ressourcen/Start_48x48.ico" Width="24" Height="24" />
+                </Button>
+                <Button x:Name="B_NextPhase" Grid.Column="1" Click="NextPhase_Click" Margin="5" ToolTip="Nächste Phase">
+                    <Image Source="/RPGInitiativeHelper;component/Ressourcen/Next_24x24.ico" Width="24" Height="24" />
+                </Button>
             </Grid>
         </Grid>
 
@@ -143,7 +150,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0" HorizontalAlignment="Left">Runde:</Label>

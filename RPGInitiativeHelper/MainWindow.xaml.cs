@@ -378,6 +378,29 @@ namespace RPGInitiativeHelper
                 MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
+        private void SaveCombatants_Click(object sender, RoutedEventArgs e)
+        {
+            if (Combatants.Count > 0)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    saveFile = saveFileDialog.FileName;
+
+                    if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
+                        return;
+
+                    SaveGroup(Combatants, saveFile);
+                }
+            }
+            else
+                MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
         private void SaveGroup(List<Fighter> group, string filepath)
         {
             try
@@ -413,7 +436,7 @@ namespace RPGInitiativeHelper
                             AddFighter(g);
                     }
                     else
-                            MessageBox.Show($"{filePath} enthält keine valide Gruppe!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show($"{filePath} enthält keine valide Gruppe!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 }
                 catch (Exception ex)
