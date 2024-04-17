@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RPGInitiativeHelper"
         mc:Ignorable="d"
-        Title="RPGInitiativeHelper" Height="400" Width="700">
+        Title="RPGInitiativeHelper" Height="400" Width="700"
+        Icon="/RPGInitiativeHelper;component/Ressourcen/Icon_16x16.ico">
     <Grid>
         <Grid.RowDefinitions>
             <!-- Menüleiste -->
