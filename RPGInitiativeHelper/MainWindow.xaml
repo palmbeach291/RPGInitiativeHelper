@@ -29,9 +29,8 @@
 
             <!-- Gruppen-Gruppe -->
             <MenuItem Header="Gruppen">
-                <MenuItem Header="Neue Gruppe"/>
-                <MenuItem Header="Lade Gruppe"/>
-                <MenuItem Header="Gruppe Speichern"/>
+                <MenuItem Header="Lade Gruppe" Click="LoadGroup_Click"/>
+                <MenuItem Header="Gruppe Speichern" Click="SaveGroup_Click"/>
             </MenuItem>
         </Menu>
 

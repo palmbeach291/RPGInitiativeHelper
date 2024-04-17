@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,10 +19,17 @@ namespace RPGInitiativeHelper
         private int CurrentFighterID = 0;
         private List<Fighter> Combatants = new List<Fighter>();
         private bool CombatStarted = false;
+        private string exePath;
+        private string exeDirectory;
+        private string savePath;
+        private string saveFile;
 
         public MainWindow()
         {
             InitializeComponent();
+            exePath = Assembly.GetExecutingAssembly().Location;
+            exeDirectory = Path.GetDirectoryName(exePath);
+            savePath = exeDirectory;
             DataContext = this;
             fighterListView.SelectionChanged += FighterListView_SelectionChanged;
             NewCombat();
@@ -51,7 +63,12 @@ namespace RPGInitiativeHelper
                 count++;
             }
 
-            Combatants.Add(new Fighter(newName, 1, 1));
+            AddFighter(new Fighter(newName, 1, 1));
+        }
+
+        private void AddFighter(Fighter fighter)
+        {
+            Combatants.Add(fighter);
             RefreshPhaseButtons();
             refreshInitiative();
         }
@@ -136,7 +153,7 @@ namespace RPGInitiativeHelper
 
             if (!string.IsNullOrEmpty(playerName))
             {
-                selectedFighter.PlayerName= playerName;
+                selectedFighter.PlayerName = playerName;
                 RefreshPlayer();
             }
         }
@@ -324,6 +341,87 @@ namespace RPGInitiativeHelper
             B_NextPhase.IsEnabled = fighterAvailable;
             B_StartFight.IsEnabled = fighterAvailable;
 
+        }
+
+        private void SaveGroup_Click(object sender, RoutedEventArgs e)
+        {
+            if (Combatants.Count > 0)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+                List<Fighter> Group = new List<Fighter>();
+
+                foreach (Fighter f in Combatants)
+                    if (f.PlayerName != "NPC")
+                        Group.Add(f);
+
+                if (Group.Count > 0)
+                {
+
+
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        saveFile = saveFileDialog.FileName;
+
+                        if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
+                            return;
+
+                        SaveGroup(Group, saveFile);
+                    }
+                }
+                else
+                    MessageBox.Show("Es existieren keine Spielercharaktere.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+                MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        private void SaveGroup(List<Fighter> group, string filepath)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(group);
+                File.WriteAllText(filepath, json);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Fehler beim Speichern der Gruppe: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void LoadGroup_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+
+                try
+                {
+                    string json = File.ReadAllText(filePath);
+                    List<Fighter> loadedGroup = JsonConvert.DeserializeObject<List<Fighter>>(json);
+
+                    if (loadedGroup.Count > 0)
+                    {
+                        foreach (Fighter g in loadedGroup)
+                            AddFighter(g);
+                    }
+                    else
+                            MessageBox.Show($"{filePath} enthält keine valide Gruppe!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                }
+                catch (Exception ex)
+                {
+                    // Fehlermeldung anzeigen, falls ein Fehler auftritt
+                    MessageBox.Show($"Fehler beim Laden der Gruppe: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }
