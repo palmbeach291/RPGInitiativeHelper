@@ -1,0 +1,2 @@
+﻿Fixes
+Ein Fehler wurde behoben, bei dem nicht alles gespeichert wurde, wenn eine Textbox vor dem Speichern ncioht verlassen wurde.

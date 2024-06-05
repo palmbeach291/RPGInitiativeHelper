@@ -222,6 +222,11 @@ namespace RPGInitiativeHelper
 
         private void TB_Name_LostFocus(object sender, RoutedEventArgs e)
         {
+            SaveName();
+        }
+
+        private void SaveName()
+        {
             if (fighterListView.SelectedItem != null)
             {
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
@@ -232,6 +237,12 @@ namespace RPGInitiativeHelper
 
         private void TB_Initiative_LostFocus(object sender, RoutedEventArgs e)
         {
+            SaveInitiative();
+        }
+
+        private bool SaveInitiative()
+        {
+            bool retval = false;
             if (fighterListView.SelectedItem != null)
             {
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
@@ -240,20 +251,28 @@ namespace RPGInitiativeHelper
                 {
                     // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
                     selectedFighter.Initiative = initiative;
+                    retval = true;
                 }
                 else
                 {
                     // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
                     MessageBox.Show("Ungültige Initiative. Bitte geben Sie eine ganze Zahl ein.");
                     TB_Initiative.Text = selectedFighter.Initiative.ToString();
-
+                    retval = false;
                 }
                 refreshInitiative();
             }
+            return retval;
         }
 
         private void TB_Current_Life_LostFocus(object sender, RoutedEventArgs e)
         {
+            SaveCurrentLife();
+        }
+
+        private bool SaveCurrentLife()
+        {
+            bool retval = false;
             if (fighterListView.SelectedItem != null)
             {
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
@@ -262,20 +281,29 @@ namespace RPGInitiativeHelper
                 {
                     // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
                     selectedFighter.Life = life;
+                    retval = true;
                 }
                 else
                 {
                     // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
                     MessageBox.Show("Ungültiger Wert für Leben. Bitte geben Sie eine ganze Zahl ein.");
                     TB_Current_Life.Text = selectedFighter.Life.ToString();
+                    retval = false;
 
                 }
                 fighterListView.Items.Refresh();
             }
+            return retval;
         }
 
         private void TB_Max_Life_LostFocus(object sender, RoutedEventArgs e)
         {
+            SaveMaxLife();
+        }
+
+        private bool SaveMaxLife()
+        {
+            bool retval = false;
             if (fighterListView.SelectedItem != null)
             {
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
@@ -284,19 +312,28 @@ namespace RPGInitiativeHelper
                 {
                     // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
                     selectedFighter.MaxLife = life;
+                    retval = true;
                 }
                 else
                 {
                     // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
                     MessageBox.Show("Ungültiger Wert für das maximale Leben. Bitte geben Sie eine ganze Zahl ein.");
                     TB_Max_Life.Text = selectedFighter.MaxLife.ToString();
+                    retval = false;
 
                 }
                 fighterListView.Items.Refresh();
             }
+
+            return retval;
         }
 
         private void TB_Notes_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveNotes();
+        }
+
+        private void SaveNotes()
         {
             if (fighterListView.SelectedItem != null)
             {
@@ -343,23 +380,71 @@ namespace RPGInitiativeHelper
 
         }
 
+        private bool SaveStats()
+        {
+            bool retval = true;
+
+            if (!SaveInitiative() || !SaveMaxLife() || !SaveCurrentLife())
+                retval = false;
+            else
+            {
+                SaveName();
+                SaveNotes();
+            }
+
+            return retval;
+        }
+
         private void SaveGroup_Click(object sender, RoutedEventArgs e)
         {
-            if (Combatants.Count > 0)
+            if (SaveStats())
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
-                saveFileDialog.FilterIndex = 1;
-                saveFileDialog.RestoreDirectory = true;
-                List<Fighter> Group = new List<Fighter>();
-
-                foreach (Fighter f in Combatants)
-                    if (f.PlayerName != "NPC")
-                        Group.Add(f);
-
-                if (Group.Count > 0)
+                if (Combatants.Count > 0)
                 {
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
+                    List<Fighter> Group = new List<Fighter>();
 
+                    foreach (Fighter f in Combatants)
+                        if (f.PlayerName != "NPC")
+                            Group.Add(f);
+
+                    if (Group.Count > 0)
+                    {
+
+
+                        if (saveFileDialog.ShowDialog() == true)
+                        {
+                            saveFile = saveFileDialog.FileName;
+
+                            if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
+                                return;
+
+                            SaveGroup(Group, saveFile);
+                        }
+                    }
+                    else
+                        MessageBox.Show("Es existieren keine Spielercharaktere.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                    MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            else
+                MessageBox.Show("Es wurde nicht gespeichert", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        private void SaveCombatants_Click(object sender, RoutedEventArgs e)
+        {
+            if (SaveStats())
+            {
+                if (Combatants.Count > 0)
+                {
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
+                    saveFileDialog.FilterIndex = 1;
+                    saveFileDialog.RestoreDirectory = true;
 
                     if (saveFileDialog.ShowDialog() == true)
                     {
@@ -368,37 +453,14 @@ namespace RPGInitiativeHelper
                         if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
                             return;
 
-                        SaveGroup(Group, saveFile);
+                        SaveGroup(Combatants, saveFile);
                     }
                 }
                 else
-                    MessageBox.Show("Es existieren keine Spielercharaktere.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
-                MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-
-        private void SaveCombatants_Click(object sender, RoutedEventArgs e)
-        {
-            if (Combatants.Count > 0)
-            {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
-                saveFileDialog.FilterIndex = 1;
-                saveFileDialog.RestoreDirectory = true;
-
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    saveFile = saveFileDialog.FileName;
-
-                    if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
-                        return;
-
-                    SaveGroup(Combatants, saveFile);
-                }
-            }
-            else
-                MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Es wurde nicht gespeichert", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private void SaveGroup(List<Fighter> group, string filepath)
@@ -412,6 +474,7 @@ namespace RPGInitiativeHelper
             {
                 MessageBox.Show($"Fehler beim Speichern der Gruppe: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+                }
         }
 
         private void LoadGroup_Click(object sender, RoutedEventArgs e)
