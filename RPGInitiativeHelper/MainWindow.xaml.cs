@@ -474,8 +474,8 @@ namespace RPGInitiativeHelper
             {
                 MessageBox.Show($"Fehler beim Speichern der Gruppe: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-                }
         }
+
 
         private void LoadGroup_Click(object sender, RoutedEventArgs e)
         {
