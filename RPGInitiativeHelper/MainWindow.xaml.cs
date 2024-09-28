@@ -209,8 +209,8 @@ namespace RPGInitiativeHelper
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
                 TB_Name.Text = selectedFighter.Name;
                 TB_Initiative.Text = selectedFighter.Initiative.ToString();
-                TB_Max_Life.Text = selectedFighter.Life.ToString();
-                TB_Current_Life.Text = selectedFighter.MaxLife.ToString();
+                TB_Max_Life.Text = selectedFighter.MaxLife.ToString();
+                TB_Current_Life.Text = selectedFighter.Life.ToString();
                 TB_Notes.Text = selectedFighter.Note;
 
                 fighterMenu.Visibility = Visibility.Visible;
