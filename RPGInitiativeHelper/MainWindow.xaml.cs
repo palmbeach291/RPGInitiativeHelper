@@ -212,6 +212,9 @@ namespace RPGInitiativeHelper
                 TB_Max_Life.Text = selectedFighter.MaxLife.ToString();
                 TB_Current_Life.Text = selectedFighter.Life.ToString();
                 TB_Notes.Text = selectedFighter.Note;
+                TB_Armor.Text = selectedFighter.Armor.ToString();
+                TB_Defence.Text = selectedFighter.Defence.ToString();
+                TB_Offence.Text = selectedFighter.Offence.ToString();
 
                 fighterMenu.Visibility = Visibility.Visible;
                 RefreshPlayer();
@@ -261,6 +264,93 @@ namespace RPGInitiativeHelper
                     retval = false;
                 }
                 refreshInitiative();
+            }
+            return retval;
+        }
+
+        private void TB_Offence_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveOffence();
+        }
+
+        private bool SaveOffence()
+        {
+            bool retval = false;
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                // Versuchen Sie, den Text in einen Integer zu konvertieren
+                if (int.TryParse(TB_Offence.Text, out int offence))
+                {
+                    // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
+                    selectedFighter.Offence = offence;
+                    retval = true;
+                }
+                else
+                {
+                    // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
+                    MessageBox.Show("Ungültiger Angriff. Bitte geben Sie eine ganze Zahl ein.");
+                    TB_Offence.Text = selectedFighter.Offence.ToString();
+                    retval = false;
+                }
+            }
+            return retval;
+        }
+
+        private void TB_Defence_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveDefence();
+        }
+
+        private bool SaveDefence()
+        {
+            bool retval = false;
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                // Versuchen Sie, den Text in einen Integer zu konvertieren
+                if (int.TryParse(TB_Defence.Text, out int defence))
+                {
+                    // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
+                    selectedFighter.Defence = defence;
+                    retval = true;
+                }
+                else
+                {
+                    // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
+                    MessageBox.Show("Ungültige Verteidigung. Bitte geben Sie eine ganze Zahl ein.");
+                    TB_Defence.Text = selectedFighter.Defence.ToString();
+                    retval = false;
+                }
+            }
+            return retval;
+        }
+
+        private void TB_Armor_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveArmor();
+        }
+
+        private bool SaveArmor()
+        {
+            bool retval = false;
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                // Versuchen Sie, den Text in einen Integer zu konvertieren
+                if (int.TryParse(TB_Armor.Text, out int armor))
+                {
+                    // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
+                    selectedFighter.Armor = armor;
+                    retval = true;
+                }
+                else
+                {
+                    // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
+                    MessageBox.Show("Ungültige Ruestung. Bitte geben Sie eine ganze Zahl ein.");
+                    TB_Armor.Text = selectedFighter.Armor.ToString();
+                    retval = false;
+                }
             }
             return retval;
         }

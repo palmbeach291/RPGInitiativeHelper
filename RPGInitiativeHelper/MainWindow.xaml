@@ -96,10 +96,22 @@
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Margin="10,10,0,0">Initiative:</Label>
                     <TextBox x:Name="TB_Initiative" Grid.Column="1" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Initiative_LostFocus"/>
+                    <Label Grid.Column="2" Margin="10,10,0,0">Anfriff:</Label>
+                    <TextBox x:Name="TB_Offence" Grid.Column="3" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Offence_LostFocus"/>
+                    <Label Grid.Column="4" Margin="10,10,0,0">Verteidigung:</Label>
+                    <TextBox x:Name="TB_Defence" Grid.Column="5" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Defence_LostFocus"/>
+                    <Label Grid.Column="6" Margin="10,10,0,0">Rüstung:</Label>
+                    <TextBox x:Name="TB_Armor" Grid.Column="7" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Armor_LostFocus"/>
                 </Grid>
                 <Label Grid.Row="2" Margin="10,10,0,0">Leben:</Label>
                 <Grid Grid.Row="3">

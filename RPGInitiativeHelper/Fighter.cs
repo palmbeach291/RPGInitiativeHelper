@@ -16,6 +16,9 @@ namespace RPGInitiativeHelper
         public int MaxMana { set; get; }
         public int Karma { set; get; }
         public int MaxKarma { set; get; }
+        public int Offence { set; get; }
+        public int Defence { set; get; }
+        public int Armor { set; get; }
         public Status.StatusValue State { set; get; }
         public string PlayerName { set; get; }
         public List<FighterState> Buffs { set; get; }
@@ -49,7 +52,7 @@ namespace RPGInitiativeHelper
             }
         }
 
-        public Fighter(string name, int initiative, int maxLife, string playerName = "NPC", int maxMana = 0, int maxKarma = 0, string note = "")
+        public Fighter(string name, int initiative, int maxLife, string playerName = "NPC", int maxMana = 0, int maxKarma = 0, string note = "", int offence = 1, int defence = 1, int armor = 1)
         {
             Name = name;
             Initiative = initiative;
@@ -62,6 +65,9 @@ namespace RPGInitiativeHelper
             PlayerName = playerName;
             State = Status.StatusValue.Standard;
             Buffs = new List<FighterState>();
+            Offence = offence;
+            Defence = defence;
+            Armor = armor;
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {
