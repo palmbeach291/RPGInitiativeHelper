@@ -434,7 +434,20 @@ namespace RPGInitiativeHelper
 
         private void refreshInitiative()
         {
-            Combatants.Sort((x, y) => y.Initiative.CompareTo(x.Initiative));
+            Combatants.Sort((x, y) =>
+            {
+                int initiativeComparison = y.Initiative.CompareTo(x.Initiative); // Zuerst nach Initiative sortieren
+                if (initiativeComparison == 0) // Wenn die Initiative gleich ist
+                {
+                    // "Nicht-NPC" Kämpfer sollen vor NPCs erscheinen
+                    bool xIsNpc = x.PlayerName == "NPC";
+                    bool yIsNpc = y.PlayerName == "NPC";
+
+                    if (xIsNpc && !yIsNpc) return 1; // NPC nach hinten verschieben
+                    if (!xIsNpc && yIsNpc) return -1; // Spieler nach vorne holen
+                }
+                return initiativeComparison; // Wenn die Initiative unterschiedlich ist, diese Sortierung beibehalten
+            });
             fighterListView.Items.Refresh();
         }
 
