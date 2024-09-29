@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace RPGInitiativeHelper
@@ -32,6 +33,7 @@ namespace RPGInitiativeHelper
             savePath = exeDirectory;
             DataContext = this;
             fighterListView.SelectionChanged += FighterListView_SelectionChanged;
+            this.KeyDown += MainWindow_KeyDown;
             NewCombat();
         }
 
@@ -610,6 +612,41 @@ namespace RPGInitiativeHelper
                     // Fehlermeldung anzeigen, falls ein Fehler auftritt
                     MessageBox.Show($"Fehler beim Laden der Gruppe: {ex.Message}", "Fehler", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Prüfen, ob STRG + D gedrückt wurde
+            if (e.Key == Key.D && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                CloneSelectedFighter();
+            }
+        }
+
+        private void CloneSelectedFighter()
+        {
+            // Überprüfen, ob ein Kämpfer ausgewählt ist
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+
+                // Klonen des ausgewählten Kämpfers
+                Fighter clonedFighter = new Fighter(selectedFighter.Name + "_Klon",
+                                                    selectedFighter.Initiative,
+                                                    selectedFighter.Life)
+                {
+                    MaxLife = selectedFighter.MaxLife,
+                    Armor = selectedFighter.Armor,
+                    Defence = selectedFighter.Defence,
+                    Offence = selectedFighter.Offence,
+                    PlayerName = selectedFighter.PlayerName,
+                    Note = selectedFighter.Note,
+                    State = Status.StatusValue.Standard
+                };
+
+                // Füge den Klon zur Liste hinzu
+                AddFighter(clonedFighter);
             }
         }
     }
