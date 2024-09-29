@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Media;
 
 namespace RPGInitiativeHelper
@@ -17,6 +18,7 @@ namespace RPGInitiativeHelper
         public int MaxKarma { set; get; }
         public Status.StatusValue State { set; get; }
         public string PlayerName { set; get; }
+        public List<FighterState> Buffs { set; get; }
 
         public string Display
         {
@@ -30,7 +32,8 @@ namespace RPGInitiativeHelper
 
         public Brush Color
         {
-            get { 
+            get
+            {
                 SolidColorBrush retVal;
 
                 if (State == Status.StatusValue.Active)
@@ -39,10 +42,10 @@ namespace RPGInitiativeHelper
                     retVal = Brushes.LightGray;
                 else if (State == Status.StatusValue.Downed)
                     retVal = Brushes.Salmon;
-                else 
+                else
                     retVal = Brushes.White;
 
-                return retVal;            
+                return retVal;
             }
         }
 
@@ -56,8 +59,9 @@ namespace RPGInitiativeHelper
             Mana = maxMana;
             MaxKarma = maxKarma;
             Note = note;
-            PlayerName= playerName;
+            PlayerName = playerName;
             State = Status.StatusValue.Standard;
+            Buffs = new List<FighterState>();
         }
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -71,7 +75,7 @@ namespace RPGInitiativeHelper
             else
                 Life += healing;
 
-            if(State == Status.StatusValue.Downed && Life >= 0)
+            if (State == Status.StatusValue.Downed && Life >= 0)
                 State = Status.StatusValue.Done;
         }
 
