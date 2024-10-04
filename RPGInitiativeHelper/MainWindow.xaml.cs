@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,17 +19,11 @@ namespace RPGInitiativeHelper
         private int CurrentFighterID = 0;
         private List<Fighter> Combatants = new List<Fighter>();
         private bool CombatStarted = false;
-        private string exePath;
-        private string exeDirectory;
-        private string savePath;
-        private string saveFile;
+        private string? saveFile;
 
         public MainWindow()
         {
             InitializeComponent();
-            exePath = Assembly.GetExecutingAssembly().Location;
-            exeDirectory = Path.GetDirectoryName(exePath);
-            savePath = exeDirectory;
             DataContext = this;
             fighterListView.SelectionChanged += FighterListView_SelectionChanged;
             this.KeyDown += MainWindow_KeyDown;
@@ -213,10 +206,13 @@ namespace RPGInitiativeHelper
                 TB_Initiative.Text = selectedFighter.Initiative.ToString();
                 TB_Max_Life.Text = selectedFighter.MaxLife.ToString();
                 TB_Current_Life.Text = selectedFighter.Life.ToString();
+                TB_Max_Mana.Text = selectedFighter.MaxMana.ToString();
+                TB_Current_Mana.Text = selectedFighter.Mana.ToString();
                 TB_Notes.Text = selectedFighter.Note;
                 TB_Armor.Text = selectedFighter.Armor.ToString();
                 TB_Defence.Text = selectedFighter.Defence.ToString();
                 TB_Offence.Text = selectedFighter.Offence.ToString();
+                TB_Damage.Text = selectedFighter.Damage;
 
                 fighterMenu.Visibility = Visibility.Visible;
                 RefreshPlayer();
@@ -273,6 +269,20 @@ namespace RPGInitiativeHelper
         private void TB_Offence_LostFocus(object sender, RoutedEventArgs e)
         {
             SaveOffence();
+        }
+
+        private void TB_Damage_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveDamage();
+        }
+
+        private void SaveDamage()
+        {
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                selectedFighter.Damage = TB_Damage.Text;
+            }
         }
 
         private bool SaveOffence()
@@ -420,6 +430,67 @@ namespace RPGInitiativeHelper
             return retval;
         }
 
+        private void TB_Current_Mana_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveCurrentMana();
+        }
+
+        private bool SaveCurrentMana()
+        {
+            bool retval = false;
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                // Versuchen Sie, den Text in einen Integer zu konvertieren
+                if (int.TryParse(TB_Current_Mana.Text, out int mana))
+                {
+                    // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
+                    selectedFighter.Mana = mana;
+                    retval = true;
+                }
+                else
+                {
+                    // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
+                    MessageBox.Show("Ungültiger Wert für Mana. Bitte geben Sie eine ganze Zahl ein.");
+                    TB_Current_Mana.Text = selectedFighter.Mana.ToString();
+                    retval = false;
+
+                }
+            }
+            return retval;
+        }
+
+        private void TB_Max_Mana_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveMaxMana();
+        }
+
+        private bool SaveMaxMana()
+        {
+            bool retval = false;
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                // Versuchen Sie, den Text in einen Integer zu konvertieren
+                if (int.TryParse(TB_Max_Mana.Text, out int mana))
+                {
+                    // Wenn die Konvertierung erfolgreich ist, aktualisieren Sie die Initiative des ausgewählten Kämpfers
+                    selectedFighter.MaxMana = mana;
+                    retval = true;
+                }
+                else
+                {
+                    // Wenn die Konvertierung fehlschlägt, können Sie eine Fehlermeldung anzeigen oder eine alternative Behandlung durchführen
+                    MessageBox.Show("Ungültiger Wert für das maximale Mana. Bitte geben Sie eine ganze Zahl ein.");
+                    TB_Max_Mana.Text = selectedFighter.MaxMana.ToString();
+                    retval = false;
+
+                }
+            }
+
+            return retval;
+        }
+
         private void TB_Notes_LostFocus(object sender, RoutedEventArgs e)
         {
             SaveNotes();
@@ -485,16 +556,46 @@ namespace RPGInitiativeHelper
 
         }
 
+        private void GetOneMana_Click(object sender, RoutedEventArgs e)
+        {
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                selectedFighter.GetMana();
+                TB_Current_Mana.Text = selectedFighter.Mana.ToString();
+            }
+        }
+
+        private void LooseOneMana_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                selectedFighter.LooseMana();
+                TB_Current_Mana.Text = selectedFighter.Mana.ToString();
+            }
+        }
+
+        //SaveStats wird benötigt um den Datentransfer von UI in die Fighterklasse durchzuführen, da bei Speichervorgängen LostFocus nicht unbedingt durchgeführt wird.
         private bool SaveStats()
         {
-            bool retval = true;
+            bool retval = false;
+            bool ini = SaveInitiative();
+            bool mLife = SaveMaxLife();
+            bool cLife = SaveCurrentLife();
+            bool mMana = SaveMaxMana();
+            bool cMana = SaveCurrentMana();
+            bool armor = SaveArmor();
+            bool defence = SaveDefence();
+            bool offence = SaveOffence();
 
-            if (!SaveInitiative() || !SaveMaxLife() || !SaveCurrentLife())
-                retval = false;
-            else
+            if (ini && mLife && cLife && mMana && cMana && armor && defence && offence)
             {
                 SaveName();
                 SaveNotes();
+                SaveDamage();
+                retval = true;
             }
 
             return retval;
@@ -642,6 +743,9 @@ namespace RPGInitiativeHelper
                     Offence = selectedFighter.Offence,
                     PlayerName = selectedFighter.PlayerName,
                     Note = selectedFighter.Note,
+                    Damage= selectedFighter.Damage,
+                    Mana= selectedFighter.Mana,
+                    MaxMana= selectedFighter.MaxMana,
                     State = Status.StatusValue.Standard
                 };
 

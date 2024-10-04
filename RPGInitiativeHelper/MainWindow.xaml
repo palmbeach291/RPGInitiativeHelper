@@ -78,7 +78,6 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 
@@ -103,18 +102,21 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Margin="10,10,0,0">Initiative:</Label>
                     <TextBox x:Name="TB_Initiative" Grid.Column="1" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Initiative_LostFocus"/>
-                    <Label Grid.Column="2" Margin="10,10,0,0">Anfriff:</Label>
+                    <Label Grid.Column="2" Margin="10,10,0,0">Angriff:</Label>
                     <TextBox x:Name="TB_Offence" Grid.Column="3" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Offence_LostFocus"/>
-                    <Label Grid.Column="4" Margin="10,10,0,0">Verteidigung:</Label>
-                    <TextBox x:Name="TB_Defence" Grid.Column="5" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Defence_LostFocus"/>
-                    <Label Grid.Column="6" Margin="10,10,0,0">Rüstung:</Label>
-                    <TextBox x:Name="TB_Armor" Grid.Column="7" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Armor_LostFocus"/>
+                    <Label Grid.Column="4" Margin="10,10,0,0">Schaden:</Label>
+                    <TextBox x:Name="TB_Damage" Grid.Column="5" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Damage_LostFocus"/>
+                    <Label Grid.Column="6" Margin="10,10,0,0">Verteidigung:</Label>
+                    <TextBox x:Name="TB_Defence" Grid.Column="7" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Defence_LostFocus"/>
+                    <Label Grid.Column="8" Margin="10,10,0,0">Rüstung:</Label>
+                    <TextBox x:Name="TB_Armor" Grid.Column="9" Width="Auto" Margin="0,10,0,0" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Armor_LostFocus"/>
                 </Grid>
-                <Label Grid.Row="2" Margin="10,10,0,0">Leben:</Label>
-                <Grid Grid.Row="3">
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
@@ -122,20 +124,39 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="TB_Current_Life" Grid.Column="0" Margin="10,5,0,10" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Current_Life_LostFocus"/>
-                    <Label Grid.Column="1" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="20">/</Label>
-                    <TextBox x:Name="TB_Max_Life" Grid.Column="2" Margin="0,5,0,10"  HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Max_Life_LostFocus"/>
-                    <Button Grid.Column="3" ToolTip="+1LeP" Click="HealOneLife_Click" Margin="10,5,5,5">
+                    <Label Grid.Column="0" Margin="10,10,0,0">Leben:</Label>
+                    <TextBox x:Name="TB_Current_Life" Grid.Column="1" Margin="10,5,0,10" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Current_Life_LostFocus"/>
+                    <Label Grid.Column="2" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="20">/</Label>
+                    <TextBox x:Name="TB_Max_Life" Grid.Column="3" Margin="0,5,0,10"  HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Max_Life_LostFocus"/>
+                    <Button Grid.Column="4" ToolTip="+1LeP" Click="HealOneLife_Click" Margin="10,5,5,5">
                         <Image Source="/RPGInitiativeHelper;component/Ressourcen/Add1Leben.ico" Width="24" Height="24"/>
                     </Button>
-                    <Button Grid.Column="4" ToolTip="-1LeP" Click="GetOneDamage_Click" Margin="10,5,5,5">
+                    <Button Grid.Column="5" ToolTip="-1LeP" Click="GetOneDamage_Click" Margin="10,5,5,5">
+                        <Image Source="/RPGInitiativeHelper;component/Ressourcen/Minus1Leben.ico" Width="24" Height="24"/>
+                    </Button>
+                    <Label Grid.Column="6" Margin="10,10,0,0">Mana:</Label>
+                    <TextBox x:Name="TB_Current_Mana" Grid.Column="7" Margin="10,5,0,10" HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Current_Mana_LostFocus"/>
+                    <Label Grid.Column="8" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="20">/</Label>
+                    <TextBox x:Name="TB_Max_Mana" Grid.Column="9" Margin="0,5,0,10"  HorizontalAlignment="Left" RenderTransformOrigin="0,0.5" LostFocus="TB_Max_Mana_LostFocus"/>
+                    <Button Grid.Column="10" ToolTip="+1Mana" Click="GetOneMana_Click" Margin="10,5,5,5">
+                        <Image Source="/RPGInitiativeHelper;component/Ressourcen/Add1Leben.ico" Width="24" Height="24"/>
+                    </Button>
+                    <Button Grid.Column="11" ToolTip="-1Mana" Click="LooseOneMana_Click" Margin="10,5,5,5">
                         <Image Source="/RPGInitiativeHelper;component/Ressourcen/Minus1Leben.ico" Width="24" Height="24"/>
                     </Button>
                 </Grid>
 
-                <Label Grid.Column="1" Grid.Row="4" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="11">Notizen:</Label>
-                <TextBox x:Name="TB_Notes" Grid.Row="5" Margin="10,0,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0,0.5" LostFocus="TB_Notes_LostFocus" AcceptsReturn="True" TextWrapping="Wrap"/>
+                <Label Grid.Column="1" Grid.Row="3" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="11">Notizen:</Label>
+                <TextBox x:Name="TB_Notes" Grid.Row="4" Margin="10,0,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0,0.5" LostFocus="TB_Notes_LostFocus" AcceptsReturn="True" TextWrapping="Wrap"/>
             </Grid>
         </Grid>
 
