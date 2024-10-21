@@ -8,6 +8,8 @@
     <PackageLicenseFile>Licence.txt</PackageLicenseFile>
     <SignAssembly>False</SignAssembly>
     <ApplicationIcon>Ressourcen\Icon_48x48.ico</ApplicationIcon>
+	<AssemblyVersion>1.1.2</AssemblyVersion>
+	<FileVersion>1.1.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

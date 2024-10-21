@@ -164,13 +164,20 @@ namespace RPGInitiativeHelper
                 {
                     B_Player.Content = "NPC";
                     B_Player.Background = Brushes.Chocolate;
+                    B_Player.Foreground = Brushes.Black;
                 }
                 else
                 {
                     B_Player.Content = selectedFighter.PlayerName;
-                    B_Player.Background = Brushes.LightGreen;
+                    B_Player.Background = Brushes.Green;
+                    B_Player.Foreground= Brushes.White;
                 }
             }
+        }
+
+        private void Info_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void NextPhase_Click(object sender, RoutedEventArgs e)

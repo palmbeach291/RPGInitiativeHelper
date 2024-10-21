@@ -53,7 +53,7 @@ namespace RPGInitiativeHelper
             }
         }
 
-        public Fighter(string name, int initiative, int maxLife, string playerName = "NPC", int maxMana = 0, int maxKarma = 0, string note = "", int offence = 1, int defence = 1, int armor = 1, string damage = "")
+        public Fighter(string name, int initiative, int maxLife, string playerName = "NPC", int maxMana = 0, int maxKarma = 0, string note = "", int offence = 1, int defence = 1, int armor = 1, string damage = "1w6")
         {
             Name = name;
             Initiative = initiative;
