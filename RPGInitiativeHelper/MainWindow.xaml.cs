@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -601,72 +602,51 @@ namespace RPGInitiativeHelper
             return retval;
         }
 
+        private void SaveData(Func<List<Fighter>> dataSelector, string noDataMessage)
+        {
+            if (!SaveStats())
+            {
+                MessageBox.Show("Es wurde nicht gespeichert", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var dataToSave = dataSelector.Invoke();
+
+            if (dataToSave.Count == 0)
+            {
+                MessageBox.Show(noDataMessage, "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                saveFile = saveFileDialog.FileName;
+
+                if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
+                    return;
+
+                SaveGroup(dataToSave, saveFile);
+            }
+        }
+
         private void SaveGroup_Click(object sender, RoutedEventArgs e)
         {
-            if (SaveStats())
-            {
-                if (Combatants.Count > 0)
-                {
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
-                    saveFileDialog.FilterIndex = 1;
-                    saveFileDialog.RestoreDirectory = true;
-                    List<Fighter> Group = new List<Fighter>();
-
-                    foreach (Fighter f in Combatants)
-                        if (f.PlayerName != "NPC")
-                            Group.Add(f);
-
-                    if (Group.Count > 0)
-                    {
-
-
-                        if (saveFileDialog.ShowDialog() == true)
-                        {
-                            saveFile = saveFileDialog.FileName;
-
-                            if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
-                                return;
-
-                            SaveGroup(Group, saveFile);
-                        }
-                    }
-                    else
-                        MessageBox.Show("Es existieren keine Spielercharaktere.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-                else
-                    MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-                MessageBox.Show("Es wurde nicht gespeichert", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+            SaveData(() => Combatants.Where(f => f.PlayerName != "NPC").ToList(), "Es existieren keine Spielercharaktere.");
         }
 
         private void SaveCombatants_Click(object sender, RoutedEventArgs e)
         {
-            if (SaveStats())
-            {
-                if (Combatants.Count > 0)
-                {
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.Filter = "Gruppendateien (*.grp)|*.grp|Alle Dateien (*.*)|*.*";
-                    saveFileDialog.FilterIndex = 1;
-                    saveFileDialog.RestoreDirectory = true;
+            SaveData(() => Combatants, "Es existieren keine Kämpfer.");
+        }
 
-                    if (saveFileDialog.ShowDialog() == true)
-                    {
-                        saveFile = saveFileDialog.FileName;
-
-                        if (File.Exists(saveFile) && !saveFileDialog.OverwritePrompt)
-                            return;
-
-                        SaveGroup(Combatants, saveFile);
-                    }
-                }
-                else
-                    MessageBox.Show("Es existieren keine Kämpfer.", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-                MessageBox.Show("Es wurde nicht gespeichert", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
+        private void SaveSelectedFighter()
+        {
+            SaveData(() => new List<Fighter> { (Fighter)fighterListView.SelectedItem }, "Kein Kämpfer ausgewählt.");
         }
 
         private void SaveGroup(List<Fighter> group, string filepath)
@@ -681,6 +661,20 @@ namespace RPGInitiativeHelper
                 MessageBox.Show($"Fehler beim Speichern der Gruppe: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Prüfen, ob STRG + D gedrückt wurde
+            if (e.Key == Key.D && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                CloneSelectedFighter();
+            }
+            else if (e.Key == Key.S && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                SaveSelectedFighter(); // STRG + S ruft SaveSelectedFighter auf
+            }
+        }
+
 
 
         private void LoadGroup_Click(object sender, RoutedEventArgs e)
@@ -716,15 +710,6 @@ namespace RPGInitiativeHelper
             }
         }
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            // Prüfen, ob STRG + D gedrückt wurde
-            if (e.Key == Key.D && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                CloneSelectedFighter();
-            }
-        }
-
         private void CloneSelectedFighter()
         {
             // Überprüfen, ob ein Kämpfer ausgewählt ist
@@ -743,9 +728,9 @@ namespace RPGInitiativeHelper
                     Offence = selectedFighter.Offence,
                     PlayerName = selectedFighter.PlayerName,
                     Note = selectedFighter.Note,
-                    Damage= selectedFighter.Damage,
-                    Mana= selectedFighter.Mana,
-                    MaxMana= selectedFighter.MaxMana,
+                    Damage = selectedFighter.Damage,
+                    Mana = selectedFighter.Mana,
+                    MaxMana = selectedFighter.MaxMana,
                     State = Status.StatusValue.Standard
                 };
 
@@ -755,3 +740,4 @@ namespace RPGInitiativeHelper
         }
     }
 }
+
