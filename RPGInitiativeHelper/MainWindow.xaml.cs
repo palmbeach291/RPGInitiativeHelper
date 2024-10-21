@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace RPGInitiativeHelper
 {
@@ -21,6 +22,8 @@ namespace RPGInitiativeHelper
         private List<Fighter> Combatants = new List<Fighter>();
         private bool CombatStarted = false;
         private string? saveFile;
+        private DispatcherTimer _timer;
+        private int _secondsElapsed;
 
         public MainWindow()
         {
@@ -28,11 +31,16 @@ namespace RPGInitiativeHelper
             DataContext = this;
             fighterListView.SelectionChanged += FighterListView_SelectionChanged;
             this.KeyDown += MainWindow_KeyDown;
+            // Timer initialisieren
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1); // Intervall auf 1 Sekunde setzen
+            _timer.Tick += Timer_Tick; // Event-Handler hinzufügen
             NewCombat();
         }
 
         private void NewCombat()
         {
+            StopTimer();
             Combatants = new List<Fighter>();
             fighterListView.ItemsSource = Combatants;
             fighterMenu.Visibility = Visibility.Hidden;
@@ -110,6 +118,7 @@ namespace RPGInitiativeHelper
             CurrentTurn = 1;
             fighterListView.SelectedItem = fighterListView.Items[0];
             Fighter CurrentFighter = (Fighter)fighterListView.Items[0];
+            StartTimer(CurrentFighter);
             CombatStarted = true;
             refreshState();
             CurrentFighter.State = Status.StatusValue.Active;
@@ -150,28 +159,29 @@ namespace RPGInitiativeHelper
             if (!string.IsNullOrEmpty(playerName))
             {
                 selectedFighter.PlayerName = playerName;
-                RefreshPlayer();
+                RefreshPlayer(selectedFighter);
             }
+            refreshInitiative();
         }
 
-        private void RefreshPlayer()
+        private void RefreshPlayer(Fighter player)
         {
-            Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
 
-            if (selectedFighter != null)
+            if (player != null)
             {
-                if (selectedFighter.PlayerName.ToLower() == "npc")
+                if (!player.isPlayer)
                 {
-                    B_Player.Content = "NPC";
+                    player.PlayerName = "NPC";
                     B_Player.Background = Brushes.Chocolate;
                     B_Player.Foreground = Brushes.Black;
                 }
                 else
                 {
-                    B_Player.Content = selectedFighter.PlayerName;
                     B_Player.Background = Brushes.Green;
-                    B_Player.Foreground= Brushes.White;
+                    B_Player.Foreground = Brushes.White;
                 }
+
+                B_Player.Content = player.PlayerName;
             }
         }
 
@@ -184,6 +194,7 @@ namespace RPGInitiativeHelper
         {
             if (CombatStarted)
             {
+                StopTimer();
                 Fighter lastFighter = (Fighter)fighterListView.Items[CurrentFighterID];
                 lastFighter.State = Status.StatusValue.Done;
                 CurrentFighterID++;
@@ -197,6 +208,7 @@ namespace RPGInitiativeHelper
 
                 Fighter CurrentFighter = (Fighter)fighterListView.Items[CurrentFighterID];
                 CurrentFighter.State = Status.StatusValue.Active;
+                StartTimer(CurrentFighter);
 
 
                 fighterListView.SelectedItem = fighterListView.Items[CurrentFighterID];
@@ -223,7 +235,7 @@ namespace RPGInitiativeHelper
                 TB_Damage.Text = selectedFighter.Damage;
 
                 fighterMenu.Visibility = Visibility.Visible;
-                RefreshPlayer();
+                RefreshPlayer(selectedFighter);
             }
             else
                 fighterMenu.Visibility = Visibility.Hidden;
@@ -744,6 +756,46 @@ namespace RPGInitiativeHelper
                 // Füge den Klon zur Liste hinzu
                 AddFighter(clonedFighter);
             }
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            _secondsElapsed++; // Zeit erhöhen
+            RefreshTimer(_secondsElapsed);
+        }
+
+        private void StartTimer(Fighter fighter)
+        {
+
+            if (fighter.isPlayer)
+            {
+                _secondsElapsed = 0;
+                _timer.Start();
+                RefreshTimer(_secondsElapsed);
+            }
+        }
+
+        private void StopTimer()
+        {
+            _timer.Stop();
+            LTimer.Content = "";
+        }
+
+        private void RefreshTimer(int seconds)
+        {
+            int rest = seconds % 60;
+            int minutes = (seconds - rest) / 60;
+
+            if (seconds >= 30)
+            {
+                LTimer.Foreground = Brushes.Red;
+            }
+            else
+            {
+                LTimer.Foreground = Brushes.Black;
+            }
+
+            LTimer.Content = $"Timer: {minutes}:{rest:d2}";
         }
     }
 }

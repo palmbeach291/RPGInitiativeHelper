@@ -23,14 +23,26 @@ namespace RPGInitiativeHelper
         public Status.StatusValue State { set; get; }
         public string PlayerName { set; get; }
         public List<FighterState> Buffs { set; get; }
+        public bool isPlayer
+        {
+            get
+            {
+                if (PlayerName.ToLower() == "npc")
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
 
         public string Display
         {
             get
             {
-                string retVal = "";
-                retVal = Initiative.ToString() + " " + Name + " " + Life.ToString() + "/" + MaxLife.ToString();
-                return retVal;
+                return Initiative.ToString() + " " + Name + " " + Life.ToString() + "/" + MaxLife.ToString();
             }
         }
 

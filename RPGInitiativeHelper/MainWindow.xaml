@@ -227,6 +227,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -236,6 +237,7 @@
             <Label x:Name="LPhaseCounter" Grid.Column="3" HorizontalAlignment="Left">1</Label>
             <Label Grid.Column="4" HorizontalAlignment="Left">Aktueller Kämpfer:</Label>
             <Label x:Name="LCurrentFighter" Grid.Column="5" HorizontalAlignment="Left">1</Label>
+            <Label Grid.Column="6" HorizontalAlignment="Left" x:Name="LTimer"></Label>
         </Grid>
     </Grid>
 </Window>
