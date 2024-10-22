@@ -27,8 +27,8 @@ namespace RPGInitiativeHelper.Configuration
         {
             try
             {
-                MenuColor = (Brush)brushConverter.ConvertFromString("Blue");
-                BackgroundColor = (Brush)brushConverter.ConvertFromString("LightBlue");
+                MenuColor = (Brush)brushConverter.ConvertFromString(ConfigurationManager.AppSettings["MenuColor"]);
+                BackgroundColor = (Brush)brushConverter.ConvertFromString(ConfigurationManager.AppSettings["BackgroundColor"]);
                 FontSize = int.Parse(ConfigurationManager.AppSettings["FontSize"]);
                 isBold = ConfigurationManager.AppSettings["Bold"].ToLower() == "true";
             }
@@ -41,6 +41,30 @@ namespace RPGInitiativeHelper.Configuration
                 isBold = true;
                 // Logging oder Error Handling könnte hier erfolgen
                 Console.WriteLine($"Error loading config: {ex.Message}");
+            }
+        }
+
+        public void SaveSettings()
+        {
+            try
+            {
+                // Konfiguration abrufen
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+                // Werte setzen
+                config.AppSettings.Settings["MenuColor"].Value = MenuColor.ToString();
+                config.AppSettings.Settings["BackgroundColor"].Value = BackgroundColor.ToString();
+                config.AppSettings.Settings["FontSize"].Value = FontSize.ToString();
+                config.AppSettings.Settings["Bold"].Value = isBold.ToString();
+
+                // Änderungen speichern
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+            catch (Exception ex)
+            {
+                // Fehlerbehandlung
+                Console.WriteLine($"Error saving config: {ex.Message}");
             }
         }
     }

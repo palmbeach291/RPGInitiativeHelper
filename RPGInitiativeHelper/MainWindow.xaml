@@ -61,6 +61,9 @@
             <Button Click="LoadGroup_Click" ToolTip="Lade Gruppe">
                 <Image Source="/RPGInitiativeHelper;component/Ressourcen/Load_24x24.ico" Width="32" Height="32"/>
             </Button>
+            <Button Click="Option_Click" ToolTip="Optionen">
+                <Image Source="/RPGInitiativeHelper;component/Ressourcen/Info_24x24.ico" Width="32" Height="32"/>
+            </Button>
             <Button Click="Info_Click" ToolTip="Info">
                 <Image Source="/RPGInitiativeHelper;component/Ressourcen/Info_24x24.ico" Width="32" Height="32"/>
             </Button>

@@ -801,6 +801,11 @@ namespace RPGInitiativeHelper
 
             LTimer.Content = $"Timer: {minutes}:{rest:d2}";
         }
+
+        private void Option_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
 
