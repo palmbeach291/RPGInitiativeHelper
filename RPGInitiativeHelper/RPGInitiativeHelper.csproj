@@ -10,6 +10,7 @@
     <ApplicationIcon>Ressourcen\Icon_48x48.ico</ApplicationIcon>
 	<AssemblyVersion>1.1.2</AssemblyVersion>
 	<FileVersion>1.1.2</FileVersion>
+	  <Copyright>Copyright © Ralf Parzefall 2024</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

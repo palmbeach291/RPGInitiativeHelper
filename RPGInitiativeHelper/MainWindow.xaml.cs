@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json;
+using RPGInitiativeHelper.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using YourNamespace;
 
 namespace RPGInitiativeHelper
 {
@@ -24,6 +26,7 @@ namespace RPGInitiativeHelper
         private string? saveFile;
         private DispatcherTimer _timer;
         private int _secondsElapsed;
+        private ConfigManager configManager = new ConfigManager();
 
         public MainWindow()
         {
@@ -187,7 +190,8 @@ namespace RPGInitiativeHelper
 
         private void Info_Click(object sender, RoutedEventArgs e)
         {
-
+            InfoWindow infoWindow = new InfoWindow();
+            infoWindow.ShowDialog(); // Öffnet das Info-Fenster als modales Dialogfenster
         }
 
         private void NextPhase_Click(object sender, RoutedEventArgs e)
