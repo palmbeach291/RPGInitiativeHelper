@@ -21,23 +21,24 @@ namespace RPGInitiativeHelper.Configuration
         private void LoadConfig()
         {
             BoldCheckBox.IsChecked = _configManager.IsBold;
+
+            // Hole die aktuellen Farben aus dem Config-Manager als Color-Objekt
+            var currentMenuColor = ((SolidColorBrush)_configManager.MenuColor).Color;
+            var currentBackgroundColor = ((SolidColorBrush)_configManager.BackgroundColor).Color;
+
             // Prüfen, ob die ComboBox-Werte existieren
             foreach (ComboBoxItem item in MenuColorComboBox.Items)
             {
                 // Vergleiche die Farbe durch Zugriff auf den Inhalt des ComboBox-Items
                 if (item.Content is string colorName)
                 {
-                    // Hole die aktuelle Farbe aus dem Config-Manager als Color-Objekt
-                    var currentColor = ((SolidColorBrush)_configManager.MenuColor).Color;
-
                     // Konvertiere den Farbnamen in eine Color-Instanz
                     var colorFromName = (Color)ColorConverter.ConvertFromString(colorName);
 
                     // Vergleiche die Farben
-                    if (currentColor == colorFromName)
+                    if (currentMenuColor == colorFromName)
                     {
                         MenuColorComboBox.SelectedItem = item;
-                        break;
                     }
                 }
             }
@@ -46,18 +47,14 @@ namespace RPGInitiativeHelper.Configuration
             {
                 // Vergleiche die Farbe durch Zugriff auf den Inhalt des ComboBox-Items
                 if (item.Content is string colorName)
-                {
-                    // Hole die aktuelle Farbe aus dem Config-Manager als Color-Objekt
-                    var currentColor = ((SolidColorBrush)_configManager.BackgroundColor).Color;
-
+                {                 
                     // Konvertiere den Farbnamen in eine Color-Instanz
                     var colorFromName = (Color)ColorConverter.ConvertFromString(colorName);
 
                     // Vergleiche die Farben
-                    if (currentColor == colorFromName)
+                    if (currentBackgroundColor == colorFromName)
                     {
                         BackgroundColorComboBox.SelectedItem = item;
-                        break;
                     }
                 }
             }

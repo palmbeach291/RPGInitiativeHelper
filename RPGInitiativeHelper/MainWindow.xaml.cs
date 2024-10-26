@@ -39,6 +39,7 @@ namespace RPGInitiativeHelper
             _timer.Interval = TimeSpan.FromSeconds(1); // Intervall auf 1 Sekunde setzen
             _timer.Tick += Timer_Tick; // Event-Handler hinzufügen
             NewCombat();
+            PaintMe();
         }
 
         private void NewCombat()
@@ -805,27 +806,46 @@ namespace RPGInitiativeHelper
         private void Option_Click(object sender, RoutedEventArgs e)
         {
             Form_Configuration ConfigDiag = new Form_Configuration(configManager);
-            
+
             ConfigDiag.ShowDialog();
+            PaintMe();
         }
 
         private void PaintMe()
         {
-
             this.Background = configManager.BackgroundColor;
-            var buttonStyle = (Style)this.Resources["ButtonStyle"];
-            var labelStyle = (Style)this.Resources["LabelStyle"];
+            ToolBarMenu.Background= configManager.MenuColor;
 
-            // Anstatt das Clear zu benutzen, suche nach vorhandenen Settern oder füge neue hinzu
-            ConfigManager.SetOrAddSetter(buttonStyle, Button.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal);
-            ConfigManager.SetOrAddSetter(buttonStyle, Button.FontFamilyProperty, configManager.FontFamily);
-            ConfigManager.SetOrAddSetter(buttonStyle, Button.FontSizeProperty, configManager.FontSize);
-            ConfigManager.SetOrAddSetter(buttonStyle, Button.BackgroundProperty, configManager.MenuColor);
+            Style newLabelStyle = new Style(typeof(Label));
+            Style newTextBoxStyle = new Style(typeof(TextBox));
+            Style newListViewStyle = new Style(typeof(ListView));
 
-            ConfigManager.SetOrAddSetter(labelStyle, Label.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal);
-            ConfigManager.SetOrAddSetter(labelStyle, Label.FontFamilyProperty, configManager.FontFamily);
-            ConfigManager.SetOrAddSetter(labelStyle, Label.FontSizeProperty, configManager.FontSize);
+            newLabelStyle.Setters.Add(new Setter(Label.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal));
+            newLabelStyle.Setters.Add(new Setter(Label.FontFamilyProperty, new FontFamily(configManager.FontFamily)));
+            newLabelStyle.Setters.Add(new Setter(Label.FontSizeProperty, (double)configManager.FontSize));
 
+            // Ersetze den alten Style in den Ressourcen
+            this.Resources["LabelStyle"] = newLabelStyle;
+
+            newListViewStyle.Setters.Add(new Setter(ListView.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal));
+            newListViewStyle.Setters.Add(new Setter(ListView.FontFamilyProperty, new FontFamily(configManager.FontFamily)));
+            newListViewStyle.Setters.Add(new Setter(ListView.FontSizeProperty, (double)configManager.FontSize));
+
+            this.Resources["ListViewStyle"] = newListViewStyle;
+
+            newTextBoxStyle.Setters.Add(new Setter(TextBox.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal));
+            newTextBoxStyle.Setters.Add(new Setter(TextBox.FontFamilyProperty, new FontFamily(configManager.FontFamily)));
+            newTextBoxStyle.Setters.Add(new Setter(TextBox.FontSizeProperty, (double)configManager.FontSize));
+            newTextBoxStyle.Setters.Add(new Setter(TextBox.BackgroundProperty, configManager.BackgroundColor));
+            newTextBoxStyle.Setters.Add(new Setter(TextBox.MinWidthProperty, 25.0));
+            newTextBoxStyle.Setters.Add(new Setter(TextBox.VerticalContentAlignmentProperty, VerticalAlignment.Center));
+            newTextBoxStyle.Setters.Add(new Setter(TextBox.HorizontalContentAlignmentProperty, HorizontalAlignment.Center));
+
+            // Ersetze den alten Style in den Ressourcen
+            this.Resources["TextBoxStyle"] = newTextBoxStyle;
+
+            // Optional: Layout aktualisieren
+            this.UpdateLayout();
         }
     }
 }

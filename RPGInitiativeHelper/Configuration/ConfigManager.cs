@@ -94,21 +94,5 @@ namespace RPGInitiativeHelper.Configuration
                 Console.WriteLine($"Error saving config: {ex.Message}");
             }
         }
-
-        public static void SetOrAddSetter(Style style, DependencyProperty property, object value)
-        {
-            // Suche nach dem bestehenden Setter
-            var existingSetter = style.Setters.OfType<Setter>().FirstOrDefault(s => s.Property == property);
-            if (existingSetter != null)
-            {
-                // Wenn der Setter bereits existiert, aktualisiere den Wert
-                existingSetter.Value = value;
-            }
-            else
-            {
-                // Andernfalls füge einen neuen Setter hinzu
-                style.Setters.Add(new Setter(property, value));
-            }
-        }
     }
 }
