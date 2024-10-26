@@ -1,56 +1,73 @@
-﻿<Window x:Class="RPGInitiativeHelper.Form_AddBuff"
+﻿<Window x:Class="RPGInitiativeHelper.Configuration.Form_Configuration"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RPGInitiativeHelper"
-        mc:Ignorable="d"
-        Title="Optionen" Height="260" Width="300" WindowStyle="None">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="Konfiguration"
+        Height="200" Width="240"
+        Background="LightBlue"
+        SizeToContent="WidthAndHeight">
+
     <Window.Resources>
-        <!-- Definiere den Stil mit einer zentralen Schriftgröße -->
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
+        <!-- Stil für Labels -->
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
         </Style>
-        <Style TargetType="Button">
-            <Setter Property="FontSize" Value="20"/>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
         </Style>
     </Window.Resources>
-    <Grid>
+
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!-- Header Label -->
-        <Label Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch" Background="DarkSlateGray" FontWeight="Bold" Foreground="White">Buff</Label>
+        <Label Content="Menüfarbe:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+        <ComboBox Name="MenuColorComboBox" Grid.Row="0" Grid.Column="1" SelectionChanged="ColorComboBox_SelectionChanged" >
+            <ComboBoxItem Content="Blue" />
+            <ComboBoxItem Content="Red" />
+            <ComboBoxItem Content="Green" />
+            <ComboBoxItem Content="LightBlue" />
+            <ComboBoxItem Content="Yellow" />
+        </ComboBox>
 
-        <!-- Name -->
-        <Label Grid.Row="1" Grid.Column="0" Margin="5">Name:</Label>
-        <TextBox x:Name="TB_Name" Grid.Row="1" Grid.Column="1" Margin="5"/>
+        <Label Content="Hintergrundfarbe:" Grid.Row="1" Grid.Column="0"  Style="{DynamicResource LabelStyle}"/>
+        <ComboBox Name="BackgroundColorComboBox" Grid.Row="1" Grid.Column="1" SelectionChanged="ColorComboBox_SelectionChanged">
+            <ComboBoxItem Content="White" />
+            <ComboBoxItem Content="LightGray" />
+            <ComboBoxItem Content="LightBlue" />
+            <ComboBoxItem Content="LightGreen" />
+            <ComboBoxItem Content="LightCoral" />
+        </ComboBox>
 
-        <!-- Runden -->
-        <Label Grid.Row="2" Grid.Column="0" Margin="5">Runden:</Label>
-        <TextBox x:Name="TB_Rounds" Grid.Row="2" Grid.Column="1" Margin="5"/>
+        <!-- Schriftgröße -->
+        <Label Content="Schriftgröße:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+        <xctk:IntegerUpDown Name="FontSizeNumericUpDown"
+                    Grid.Row="2" Grid.Column="1"
+                    Minimum="8" Maximum="24"
+                    Value="14" ValueChanged="FontSizeNumericUpDown_ValueChanged"/>
 
-        <!-- Beschreibung -->
-        <Label Grid.Row="3" Grid.Column="0" Margin="5">Beschreibung:</Label>
-        <TextBox x:Name="TB_Description" Grid.Row="3" Grid.Column="1" Margin="5"/>
+        <Label Content="Fett:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+        <CheckBox Name="BoldCheckBox" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Checked="BoldCheckBox_Click" Unchecked="BoldCheckBox_Click" Height="14" Width="24"/>
 
-        <!-- Buttons -->
-        <Grid Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Click="OK_Click" Margin="5">OK</Button>
-            <Button Grid.Column="1" Click="Cancel_Click" Margin="5">Abbrechen</Button>
-        </Grid>
+            <Button Content="Speichern" Grid.Row="4" Grid.Column="0" Click="SaveButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
+            <Button Content="Zurücksetzen" Grid.Row="4" Grid.Column="1" Click="ResetButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
+            <Button Content="Standard" Grid.Row="5" Grid.Column="0" Click="DefaultButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
+        <Button Content="Abbrechen" Grid.Row="5" Grid.Column="1" Click="CancelButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
     </Grid>
 </Window>

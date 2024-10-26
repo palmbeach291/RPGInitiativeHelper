@@ -804,7 +804,28 @@ namespace RPGInitiativeHelper
 
         private void Option_Click(object sender, RoutedEventArgs e)
         {
+            Form_Configuration ConfigDiag = new Form_Configuration(configManager);
             
+            ConfigDiag.ShowDialog();
+        }
+
+        private void PaintMe()
+        {
+
+            this.Background = configManager.BackgroundColor;
+            var buttonStyle = (Style)this.Resources["ButtonStyle"];
+            var labelStyle = (Style)this.Resources["LabelStyle"];
+
+            // Anstatt das Clear zu benutzen, suche nach vorhandenen Settern oder füge neue hinzu
+            ConfigManager.SetOrAddSetter(buttonStyle, Button.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal);
+            ConfigManager.SetOrAddSetter(buttonStyle, Button.FontFamilyProperty, configManager.FontFamily);
+            ConfigManager.SetOrAddSetter(buttonStyle, Button.FontSizeProperty, configManager.FontSize);
+            ConfigManager.SetOrAddSetter(buttonStyle, Button.BackgroundProperty, configManager.MenuColor);
+
+            ConfigManager.SetOrAddSetter(labelStyle, Label.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal);
+            ConfigManager.SetOrAddSetter(labelStyle, Label.FontFamilyProperty, configManager.FontFamily);
+            ConfigManager.SetOrAddSetter(labelStyle, Label.FontSizeProperty, configManager.FontSize);
+
         }
     }
 }

@@ -10,14 +10,14 @@
 
     <Window.Resources>
         <!-- Stil für Labels -->
-        <Style TargetType="Label">
+        <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontFamily" Value="Roboto"/>
         </Style>
 
         <!-- Stil für TextBoxen -->
-        <Style TargetType="TextBox">
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="MinWidth" Value="25"/>
             <Setter Property="FontWeight" Value="Bold"/>
