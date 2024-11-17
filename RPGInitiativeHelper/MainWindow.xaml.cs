@@ -206,6 +206,24 @@ namespace RPGInitiativeHelper
 
                 if (CurrentFighterID >= Combatants.Count)
                 {
+                    foreach (Fighter fighter in Combatants)
+                    {
+                        // Reduziere die Rundenanzahl
+                        foreach (FighterState buff in fighter.Buffs)
+                        {
+                            buff.rounds--;
+                        }
+
+                        // Erstelle danach die Liste von Buffs, die entfernt werden sollen
+                        List<FighterState> buffsToRemove = fighter.Buffs.Where(buff => buff.rounds < 1).ToList();
+
+                        // Entferne die Buffs außerhalb der Iteration
+                        foreach (FighterState buff in buffsToRemove)
+                        {
+                            fighter.Buffs.Remove(buff);
+                        }
+                    }
+
                     CurrentTurn++;
                     CurrentFighterID = 0;
                     refreshState();
@@ -217,11 +235,17 @@ namespace RPGInitiativeHelper
 
 
                 fighterListView.SelectedItem = fighterListView.Items[CurrentFighterID];
+                RefreshDetails();
                 RefreshTurnLabels();
             }
         }
 
         private void FighterListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshDetails();
+        }
+
+        private void RefreshDetails()
         {
             // Hier können Sie den ausgewählten Fighter abrufen und das andere UI-Element anpassen
             if (fighterListView.SelectedItem != null)
@@ -238,6 +262,8 @@ namespace RPGInitiativeHelper
                 TB_Defence.Text = selectedFighter.Defence.ToString();
                 TB_Offence.Text = selectedFighter.Offence.ToString();
                 TB_Damage.Text = selectedFighter.Damage;
+                BuffListView.ItemsSource = selectedFighter.Buffs;
+                BuffListView.Items.Refresh();
 
                 fighterMenu.Visibility = Visibility.Visible;
                 RefreshPlayer(selectedFighter);
@@ -814,7 +840,7 @@ namespace RPGInitiativeHelper
         private void PaintMe()
         {
             this.Background = configManager.BackgroundColor;
-            ToolBarMenu.Background= configManager.MenuColor;
+            ToolBarMenu.Background = configManager.MenuColor;
 
             Style newLabelStyle = new Style(typeof(Label));
             Style newTextBoxStyle = new Style(typeof(TextBox));
@@ -846,6 +872,31 @@ namespace RPGInitiativeHelper
 
             // Optional: Layout aktualisieren
             this.UpdateLayout();
+        }
+
+        private void AddBuff_Click(object sender, RoutedEventArgs e)
+        {
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter SelectedFighter = (Fighter)fighterListView.SelectedItem;
+                Form_FighterState form = new Form_FighterState(SelectedFighter);
+                form.ShowDialog();
+                SelectedFighter.Buffs.Add(form.fighterState);
+            }
+            BuffListView.Items.Refresh();
+        }
+
+        private void RemoveBuff_Click(object sender, RoutedEventArgs e)
+        {
+            if (BuffListView.SelectedItem != null && fighterListView.SelectedItem != null)
+            {
+                FighterState SelectedBuff = (FighterState)BuffListView.SelectedItem;
+                Fighter SelectedFighter = (Fighter)fighterListView.SelectedItem;
+
+                SelectedFighter.Buffs.Remove(SelectedBuff);
+            }
+
+            BuffListView.Items.Refresh();
         }
     }
 }

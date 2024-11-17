@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace RPGInitiativeHelper
 {
-    internal class Fighter
+    public class Fighter
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public string Name { set; get; }
@@ -42,7 +42,7 @@ namespace RPGInitiativeHelper
         {
             get
             {
-                return Initiative.ToString() + " " + Name + " " + Life.ToString() + "/" + MaxLife.ToString();
+                return $"{Initiative} {Name} {Life}/{MaxLife}";
             }
         }
 
@@ -83,6 +83,7 @@ namespace RPGInitiativeHelper
             Armor = armor;
             Damage = damage;
         }
+
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

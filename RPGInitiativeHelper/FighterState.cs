@@ -1,22 +1,46 @@
-﻿namespace RPGInitiativeHelper
+﻿using RPGInitiativeHelper.Configuration;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows;
+
+namespace RPGInitiativeHelper
 {
     public class FighterState
     {
-        string name { get; set; }
-        int rounds { get; set; }
-        string description { get; set; }
+        public string name { get; set; }
+        public int rounds { get; set; }
+        public string description { get; set; }
+        public bool isBonus { get; set; }
 
-        public FighterState(string name, int rounds, string description = "")
+        public FighterState(Fighter parent, string name, int rounds, string description = "")
         {
             this.name = name;
             this.rounds = rounds;
             this.description = description;
+            this.isBonus = true;
         }
 
-        public int DecreaseRounds()
+        public string Display
         {
-            rounds--;
-            return rounds;
+            get
+            {
+                return $"{name} {rounds}";
+            }
+        }
+
+        public Brush Color
+        {
+            get
+            {
+                SolidColorBrush retVal;
+
+                if (isBonus)
+                    retVal = Brushes.LightGreen;
+                else
+                    retVal = Brushes.LightSalmon;
+
+                return retVal;
+            }
         }
     }
 }
