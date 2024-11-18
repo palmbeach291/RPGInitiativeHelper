@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Media;
+using System.Linq;
 
 namespace RPGInitiativeHelper
 {
@@ -20,6 +21,12 @@ namespace RPGInitiativeHelper
         public int Defence { set; get; }
         public int Armor { set; get; }
         public string Damage { set; get; }
+        public bool isDowned {
+            get
+            {
+                return Life < 0;
+            }
+        }
         public Status.StatusValue State { set; get; }
         public string PlayerName { set; get; }
         public List<FighterState> Buffs { set; get; }
@@ -51,16 +58,19 @@ namespace RPGInitiativeHelper
             get
             {
                 SolidColorBrush retVal;
-
-                if (State == Status.StatusValue.Active)
-                    retVal = Brushes.LightGreen;
-                else if (State == Status.StatusValue.Done)
-                    retVal = Brushes.LightGray;
-                else if (State == Status.StatusValue.Downed)
+                if (isDowned)
+                {
                     retVal = Brushes.Salmon;
+                }
                 else
-                    retVal = Brushes.White;
-
+                {
+                    if (State == Status.StatusValue.Active)
+                        retVal = Brushes.LightGreen;
+                    else if (State == Status.StatusValue.Done)
+                        retVal = Brushes.LightGray;
+                    else
+                        retVal = Brushes.White;
+                }
                 return retVal;
             }
         }
@@ -96,7 +106,7 @@ namespace RPGInitiativeHelper
             else
                 Life += healing;
 
-            if (State == Status.StatusValue.Downed && Life >= 0)
+            if (!isDowned)
                 State = Status.StatusValue.Done;
         }
 
@@ -111,9 +121,6 @@ namespace RPGInitiativeHelper
         public void GetDamage(int damage = 1)
         {
             Life -= damage;
-
-            if (State != Status.StatusValue.Downed && Life < 0)
-                State = Status.StatusValue.Downed;
         }
 
         public void LooseMana(int diffMana = 1)
@@ -123,6 +130,25 @@ namespace RPGInitiativeHelper
             else
                 Mana = 0;
         }
+
+        public void DecreaseBuff()
+        {
+            foreach (FighterState Buff in Buffs)
+            {
+                if (!Buff.isFresh)
+                {
+                    Buff.rounds--;
+                }
+                Buff.isFresh = false;
+            }
+
+            // Liste mit den zu entfernenden Buffs
+            List<FighterState> buffsToRemove = Buffs.Where(buff => buff.rounds < 1).ToList();
+            foreach (FighterState Buff in buffsToRemove)
+            {
+                Buffs.Remove(Buff);
+            }
+        }
     }
 
     public struct Status
@@ -131,8 +157,7 @@ namespace RPGInitiativeHelper
         {
             Active,
             Done,
-            Standard,
-            Downed
+            Standard
         }
 
         public StatusValue Value { get; }

@@ -140,8 +140,7 @@ namespace RPGInitiativeHelper
         {
             foreach (Fighter f in fighterListView.Items)
             {
-                if (f.State != Status.StatusValue.Downed)
-                    f.State = Status.StatusValue.Standard;
+                f.State = Status.StatusValue.Standard;
             }
         }
 
@@ -218,30 +217,14 @@ namespace RPGInitiativeHelper
                 do
                 {
                     StopTimer();
-                    Fighter lastFighter = (Fighter)fighterListView.Items[CurrentFighterID];
-                    foreach (FighterState Buff in lastFighter.Buffs)
+                    Fighter lastFighter = Combatants.FirstOrDefault(f => f.State == Status.StatusValue.Active);
+                    if (lastFighter != null)
                     {
-                        if (!Buff.isFresh)
-                        {
-                            Buff.rounds--;
-                        }
-                        Buff.isFresh = false;
-                    }
-
-                    // Liste mit den zu entfernenden Buffs
-                    List<FighterState> buffsToRemove = lastFighter.Buffs.Where(buff => buff.rounds < 1).ToList();
-                    foreach (FighterState Buff in buffsToRemove)
-                    {
-                        lastFighter.Buffs.Remove(Buff);
-                    }
-
-                    if (lastFighter.State != Status.StatusValue.Downed)
-                    {
+                        lastFighter.DecreaseBuff();
                         lastFighter.State = Status.StatusValue.Done;
                     }
-
                     // Neuer Kämpfer
-                    CurrentFighterID++;
+                    GetCurrentFighterID();
                     if (CurrentFighterID >= Combatants.Count)
                     {
                         CurrentTurn++;
@@ -269,6 +252,26 @@ namespace RPGInitiativeHelper
                     }
                 }
                 while (!viableFighter);
+            }
+        }
+
+        private void GetCurrentFighterID()
+        {
+            // Finde den Fighter mit der höchsten Initiative, der den Status "Standard" hat
+            Fighter selectedFighter = Combatants
+                .Where(f => f.State == Status.StatusValue.Standard) // Filtere nur Fighter mit Status Standard
+                .OrderByDescending(f => f.Initiative) // Sortiere nach Initiative in absteigender Reihenfolge
+                .FirstOrDefault(); // Hole den ersten Fighter
+
+            if (selectedFighter != null)
+            {
+                // Setze CurrentFighterID auf den Index des Fighters in der Liste
+                CurrentFighterID = Combatants.IndexOf(selectedFighter);
+            }
+            else
+            {
+                // Falls kein Fighter mit Status "Standard" gefunden wird, setze ID auf -1 oder eine andere Logik
+                CurrentFighterID = Combatants.Count;
             }
         }
 
