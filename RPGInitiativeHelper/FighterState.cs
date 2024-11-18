@@ -11,6 +11,7 @@ namespace RPGInitiativeHelper
         public int rounds { get; set; }
         public string description { get; set; }
         public bool isBonus { get; set; }
+        public bool isFresh = false;
 
         public FighterState(Fighter parent, string name, int rounds, string description = "")
         {

@@ -120,16 +120,23 @@ namespace RPGInitiativeHelper
         private void StartFight_Click(object sender, RoutedEventArgs e)
         {
             CurrentTurn = 1;
+
+            //Entferne alle Buffs von bestehen Kämpfern
+            foreach (Fighter fighter in Combatants)
+            {
+                fighter.Buffs = new List<FighterState>();
+            }
+
             fighterListView.SelectedItem = fighterListView.Items[0];
             Fighter CurrentFighter = (Fighter)fighterListView.Items[0];
             StartTimer(CurrentFighter);
             CombatStarted = true;
-            refreshState();
+            RefreshState();
             CurrentFighter.State = Status.StatusValue.Active;
             RefreshTurnLabels();
         }
 
-        private void refreshState()
+        private void RefreshState()
         {
             foreach (Fighter f in fighterListView.Items)
             {
@@ -197,48 +204,74 @@ namespace RPGInitiativeHelper
 
         private void NextPhase_Click(object sender, RoutedEventArgs e)
         {
+            NextPlayer();
+        }
+
+        private void NextPlayer()
+        {
             if (CombatStarted)
             {
-                StopTimer();
-                Fighter lastFighter = (Fighter)fighterListView.Items[CurrentFighterID];
-                lastFighter.State = Status.StatusValue.Done;
-                CurrentFighterID++;
+                bool viableFighter = false;
+                int iterationCount = 0; // Schutz gegen Endlosschleifen
+                int maxIterations = Combatants.Count; // Maximal erlaubte Iterationen
 
-                if (CurrentFighterID >= Combatants.Count)
+                do
                 {
-                    foreach (Fighter fighter in Combatants)
+                    StopTimer();
+                    Fighter lastFighter = (Fighter)fighterListView.Items[CurrentFighterID];
+                    foreach (FighterState Buff in lastFighter.Buffs)
                     {
-                        // Reduziere die Rundenanzahl
-                        foreach (FighterState buff in fighter.Buffs)
+                        if (!Buff.isFresh)
                         {
-                            buff.rounds--;
+                            Buff.rounds--;
                         }
-
-                        // Erstelle danach die Liste von Buffs, die entfernt werden sollen
-                        List<FighterState> buffsToRemove = fighter.Buffs.Where(buff => buff.rounds < 1).ToList();
-
-                        // Entferne die Buffs außerhalb der Iteration
-                        foreach (FighterState buff in buffsToRemove)
-                        {
-                            fighter.Buffs.Remove(buff);
-                        }
+                        Buff.isFresh = false;
                     }
 
-                    CurrentTurn++;
-                    CurrentFighterID = 0;
-                    refreshState();
+                    // Liste mit den zu entfernenden Buffs
+                    List<FighterState> buffsToRemove = lastFighter.Buffs.Where(buff => buff.rounds < 1).ToList();
+                    foreach (FighterState Buff in buffsToRemove)
+                    {
+                        lastFighter.Buffs.Remove(Buff);
+                    }
+
+                    if (lastFighter.State != Status.StatusValue.Downed)
+                    {
+                        lastFighter.State = Status.StatusValue.Done;
+                    }
+
+                    // Neuer Kämpfer
+                    CurrentFighterID++;
+                    if (CurrentFighterID >= Combatants.Count)
+                    {
+                        CurrentTurn++;
+                        CurrentFighterID = 0;
+                        RefreshState();
+                    }
+
+                    Fighter CurrentFighter = (Fighter)fighterListView.Items[CurrentFighterID];
+                    if (CurrentFighter.State == Status.StatusValue.Standard)
+                    {
+                        CurrentFighter.State = Status.StatusValue.Active;
+                        viableFighter = true;
+                    }
+                    StartTimer(CurrentFighter);
+
+                    fighterListView.SelectedItem = fighterListView.Items[CurrentFighterID];
+                    RefreshDetails();
+                    RefreshTurnLabels();
+
+                    iterationCount++;
+                    if (iterationCount >= maxIterations)
+                    {
+                        // Abbruch, wenn kein passender Kämpfer gefunden wurde, um Endlosschleife zu verhindern
+                        break;
+                    }
                 }
-
-                Fighter CurrentFighter = (Fighter)fighterListView.Items[CurrentFighterID];
-                CurrentFighter.State = Status.StatusValue.Active;
-                StartTimer(CurrentFighter);
-
-
-                fighterListView.SelectedItem = fighterListView.Items[CurrentFighterID];
-                RefreshDetails();
-                RefreshTurnLabels();
+                while (!viableFighter);
             }
         }
+
 
         private void FighterListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -881,6 +914,11 @@ namespace RPGInitiativeHelper
                 Fighter SelectedFighter = (Fighter)fighterListView.SelectedItem;
                 Form_FighterState form = new Form_FighterState(SelectedFighter);
                 form.ShowDialog();
+
+                if (SelectedFighter.State == Status.StatusValue.Active)
+                {
+                    form.fighterState.isFresh = true;
+                }
                 SelectedFighter.Buffs.Add(form.fighterState);
             }
             BuffListView.Items.Refresh();
