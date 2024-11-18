@@ -35,7 +35,7 @@ namespace RPGInitiativeHelper
         {
             get
             {
-                return $"{name} {rounds}";
+                return $"{name} Runden: {rounds}";
             }
         }
 

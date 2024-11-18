@@ -1,5 +1,5 @@
-﻿using System.Configuration;
-using System.Linq;
+﻿using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,10 +14,42 @@ namespace RPGInitiativeHelper.Configuration
         public Form_Configuration(ConfigManager configManager)
         {
             InitializeComponent();
+            LoadColorsIntoComboBoxes();
             _configManager = configManager;
             LoadConfig();
         }
 
+        private void LoadColorsIntoComboBoxes()
+        {
+            // Hole alle vordefinierten Farben aus der Colors-Klasse
+            var colors = typeof(Colors).GetProperties(BindingFlags.Public | BindingFlags.Static)
+                                       .Select(p => new { Name = p.Name, Color = (Color)p.GetValue(null) })
+                                       .Where(c => c.Color != Colors.Black &&
+                                                c.Color != Colors.MidnightBlue &&
+                                                c.Color != Colors.Navy)
+                                       .OrderBy(c => c.Name);
+
+            foreach (var color in colors)
+            {
+                // Item für MenuColorComboBox
+                ComboBoxItem menuColorItem = new ComboBoxItem
+                {
+                    Content = color.Name,
+                    Background = new SolidColorBrush(color.Color),
+                    Foreground = new SolidColorBrush(Colors.Black) // Sicherstellen, dass der Text sichtbar ist
+                };
+                MenuColorComboBox.Items.Add(menuColorItem);
+
+                // Item für BackgroundColorComboBox
+                ComboBoxItem backgroundColorItem = new ComboBoxItem
+                {
+                    Content = color.Name,
+                    Background = new SolidColorBrush(color.Color),
+                    Foreground = new SolidColorBrush(Colors.Black)
+                };
+                BackgroundColorComboBox.Items.Add(backgroundColorItem);
+            }
+        }
         private void LoadConfig()
         {
             BoldCheckBox.IsChecked = _configManager.IsBold;
@@ -47,7 +79,7 @@ namespace RPGInitiativeHelper.Configuration
             {
                 // Vergleiche die Farbe durch Zugriff auf den Inhalt des ComboBox-Items
                 if (item.Content is string colorName)
-                {                 
+                {
                     // Konvertiere den Farbnamen in eine Color-Instanz
                     var colorFromName = (Color)ColorConverter.ConvertFromString(colorName);
 
@@ -134,7 +166,7 @@ namespace RPGInitiativeHelper.Configuration
         {
             if (_configManager != null)
             {
-                if(BackgroundColorComboBox.SelectedItem != null)
+                if (BackgroundColorComboBox.SelectedItem != null)
                 {
                     _configManager.BackgroundColor = brushConverter.ConvertFromString((BackgroundColorComboBox.SelectedItem as ComboBoxItem).Content.ToString()) as Brush;
                 }
@@ -147,8 +179,8 @@ namespace RPGInitiativeHelper.Configuration
                 _configManager.FontSize = (int)FontSizeNumericUpDown.Value;
 
                 _configManager.IsBold = (bool)BoldCheckBox.IsChecked;
-                
-                PaintMe();  
+
+                PaintMe();
             }
         }
 

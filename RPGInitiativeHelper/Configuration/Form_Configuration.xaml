@@ -38,22 +38,9 @@
         </Grid.ColumnDefinitions>
 
         <Label Content="Menüfarbe:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-        <ComboBox Name="MenuColorComboBox" Grid.Row="0" Grid.Column="1" SelectionChanged="ColorComboBox_SelectionChanged" >
-            <ComboBoxItem Content="Blue" />
-            <ComboBoxItem Content="Red" />
-            <ComboBoxItem Content="Green" />
-            <ComboBoxItem Content="LightBlue" />
-            <ComboBoxItem Content="Yellow" />
-        </ComboBox>
-
-        <Label Content="Hintergrundfarbe:" Grid.Row="1" Grid.Column="0"  Style="{DynamicResource LabelStyle}"/>
-        <ComboBox Name="BackgroundColorComboBox" Grid.Row="1" Grid.Column="1" SelectionChanged="ColorComboBox_SelectionChanged">
-            <ComboBoxItem Content="White" />
-            <ComboBoxItem Content="LightGray" />
-            <ComboBoxItem Content="LightBlue" />
-            <ComboBoxItem Content="LightGreen" />
-            <ComboBoxItem Content="LightCoral" />
-        </ComboBox>
+        <ComboBox Name="MenuColorComboBox" Grid.Row="0" Grid.Column="1" SelectionChanged="ColorComboBox_SelectionChanged" />
+        <Label Content="Hintergrundfarbe:" Grid.Row="1" Grid.Column="0" Style="{DynamicResource LabelStyle}" />
+        <ComboBox Name="BackgroundColorComboBox" Grid.Row="1" Grid.Column="1" SelectionChanged="ColorComboBox_SelectionChanged" />
 
         <!-- Schriftgröße -->
         <Label Content="Schriftgröße:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>

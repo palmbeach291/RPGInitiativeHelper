@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RPGInitiativeHelper"
         mc:Ignorable="d"
-        Title="RPGInitiativeHelper" Height="400" Width="750"
+        Title="RPGInitiativeHelper" Height="600" Width="750"
         Background="LightBlue"
         Icon="/RPGInitiativeHelper;component/Ressourcen/Icon_16x16.ico">
 
