@@ -8,18 +8,18 @@ namespace RPGInitiativeHelper
     public partial class Form_FighterState : Window
     {
         public FighterState fighterState { get; set; }
+        // Konstruktor, der eine Kopie des Original-Objekts verwendet
         public Form_FighterState(FighterState fs)
         {
             InitializeComponent();
-            fighterState = fs;
-            TB_Name.Text = fighterState.name;
+            fighterState = new FighterState(fs); // Kopie des Objekts erstellen
             InitialConfig();
         }
 
         public Form_FighterState(Fighter parent)
         {
             InitializeComponent();
-            fighterState = new FighterState(parent,"",1);
+            fighterState = new FighterState(parent, "", 1);
             InitialConfig();
         }
 
@@ -46,17 +46,16 @@ namespace RPGInitiativeHelper
                 fighterState.name = TB_Name.Text;
                 fighterState.description = TB_Description.Text;
                 fighterState.rounds = (int)DurationNumericUpDown.Value;
-
                 fighterState.isBonus = (bool)this.RB_Boni.IsChecked;
 
+                this.DialogResult = true; // DialogResult setzen
                 this.Close();
             }
         }
 
-
-
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false; // DialogResult setzen
             this.Close();
         }
     }

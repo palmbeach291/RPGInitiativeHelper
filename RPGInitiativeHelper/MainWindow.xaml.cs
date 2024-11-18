@@ -936,6 +936,37 @@ namespace RPGInitiativeHelper
 
             BuffListView.Items.Refresh();
         }
+
+        private void TB_Buff_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2) // Überprüfen, ob es ein Doppelklick ist
+            {
+                TextBlock textBlock = sender as TextBlock;
+                if (textBlock != null && textBlock.DataContext is FighterState item)
+                {
+                    if (fighterListView.SelectedItem != null)
+                    {
+                        Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+
+                        // Öffne das Formular zur Bearbeitung einer Kopie des Buffs
+                        Form_FighterState form = new Form_FighterState(item);
+                        form.ShowDialog();
+
+                        if (form.DialogResult == true) // Überprüfen, ob der Benutzer Änderungen bestätigt hat
+                        {
+                            // Übernehme die bearbeiteten Werte in das Original-Objekt
+                            item.name = form.fighterState.name;
+                            item.rounds = form.fighterState.rounds;
+                            item.description = form.fighterState.description;
+                            item.isBonus = form.fighterState.isBonus;
+                            item.isFresh = form.fighterState.isFresh;
+
+                            BuffListView.Items.Refresh();
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

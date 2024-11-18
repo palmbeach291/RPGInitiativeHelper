@@ -21,6 +21,16 @@ namespace RPGInitiativeHelper
             this.isBonus = true;
         }
 
+        // Kopierkonstruktor
+        public FighterState(FighterState original)
+        {
+            this.name = original.name;
+            this.rounds = original.rounds;
+            this.description = original.description;
+            this.isBonus = original.isBonus;
+            this.isFresh = original.isFresh;
+        }
+
         public string Display
         {
             get

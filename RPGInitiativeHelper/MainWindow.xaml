@@ -231,7 +231,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <!-- Definieren Sie hier, wie jedes Element in der Liste angezeigt werden soll -->
-                                <TextBlock Text="{Binding Display}" Background="{Binding Color}"/>
+                                <TextBlock Text="{Binding Display}" Background="{Binding Color}" MouseLeftButtonDown="TB_Buff_MouseDoubleClick"/>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
