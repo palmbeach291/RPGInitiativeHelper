@@ -7,12 +7,22 @@
         mc:Ignorable="d"
         Title="Spieler Name" Height="130" Width="200" WindowStyle="None">
     <Window.Resources>
-        <!-- Definiere den Stil mit einer zentralen Schriftgröße -->
-        <Style TargetType="Label">
-            <Setter Property="FontSize" Value="20"/>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
         </Style>
-        <Style TargetType="Button">
-            <Setter Property="FontSize" Value="20"/>
+
+        <Style x:Key="LabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
+        </Style>
+
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -22,9 +32,9 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" VerticalAlignment="Stretch" Background="DarkSlateGray" FontWeight="Bold" Foreground="White">Spieler</Label>
+        <Label Grid.Row="0" VerticalAlignment="Stretch" Style="{DynamicResource LabelStyle}">Spieler</Label>
 
-        <TextBox x:Name="TB_PlayerName" Grid.Row="1"  Margin="5"></TextBox>
+        <TextBox x:Name="TB_PlayerName" Grid.Row="1"  Margin="5" Style="{DynamicResource TextBoxStyle}"></TextBox>
 
         <Grid Grid.Row="2" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
@@ -32,8 +42,8 @@
                 <ColumnDefinition Width="110.163"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Click="OK_Click"  Margin="5" Height="30">OK</Button>
-            <Button Grid.Column="1" Click="Cancel_Click" Margin="5" Height="30">Abbrechen</Button>
+            <Button Grid.Column="0" Click="OK_Click"  Margin="5" Height="30" Style="{DynamicResource ButtonStyle}">OK</Button>
+            <Button Grid.Column="1" Click="Cancel_Click" Margin="5" Height="30" Style="{DynamicResource ButtonStyle}">Abbrechen</Button>
 
         </Grid>
     </Grid>
