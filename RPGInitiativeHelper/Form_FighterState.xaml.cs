@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using RPGInitiativeHelper.Configuration;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace RPGInitiativeHelper
 {
@@ -7,6 +10,7 @@ namespace RPGInitiativeHelper
     /// </summary>
     public partial class Form_FighterState : Window
     {
+        ConfigManager _configManager = new ConfigManager();
         public FighterState fighterState { get; set; }
         // Konstruktor, der eine Kopie des Original-Objekts verwendet
         public Form_FighterState(FighterState fs)
@@ -37,6 +41,8 @@ namespace RPGInitiativeHelper
             {
                 this.RB_Mali.IsChecked = true;
             }
+
+            PaintMe();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -57,6 +63,32 @@ namespace RPGInitiativeHelper
         {
             this.DialogResult = false; // DialogResult setzen
             this.Close();
+        }
+
+        private void PaintMe()
+        {
+            this.Background = _configManager.BackgroundColor;
+            // Neuen dynamischen Label-Style erstellen
+            Style newLabelStyle = new Style(typeof(Label));
+            newLabelStyle.Setters.Add(new Setter(Label.FontWeightProperty, _configManager.IsBold ? FontWeights.Bold : FontWeights.Normal));
+            newLabelStyle.Setters.Add(new Setter(Label.FontFamilyProperty, new FontFamily(_configManager.FontFamily)));
+            newLabelStyle.Setters.Add(new Setter(Label.FontSizeProperty, (double)_configManager.FontSize));
+
+            // Ersetze den alten Style in den Ressourcen
+            this.Resources["LabelStyle"] = newLabelStyle;
+
+            // Neuen dynamischen Button-Style erstellen
+            Style newButtonStyle = new Style(typeof(Button));
+            newButtonStyle.Setters.Add(new Setter(Button.FontWeightProperty, _configManager.IsBold ? FontWeights.Bold : FontWeights.Normal));
+            newButtonStyle.Setters.Add(new Setter(Button.FontFamilyProperty, new FontFamily(_configManager.FontFamily)));
+            newButtonStyle.Setters.Add(new Setter(Button.FontSizeProperty, (double)_configManager.FontSize));
+            newButtonStyle.Setters.Add(new Setter(Button.BackgroundProperty, _configManager.MenuColor));
+
+            // Ersetze den alten Style in den Ressourcen
+            this.Resources["ButtonStyle"] = newButtonStyle;
+
+            // Optional: Layout aktualisieren
+            this.UpdateLayout();
         }
     }
 }

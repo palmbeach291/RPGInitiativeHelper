@@ -226,7 +226,7 @@
                         </Button>
                     </Grid>
                     <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="TB_Notes" Grid.Row="1" Grid.Column="0" Margin="10,0,10,10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0,0.5" LostFocus="TB_Notes_LostFocus" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" HorizontalContentAlignment="Left"/>
-                    <ListView Style="{DynamicResource ListViewStyle}" x:Name="BuffListView" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Combatants}" SelectionMode="Single" Margin="10,0,10,10">
+                    <ListView Style="{DynamicResource ListViewStyle}" x:Name="BuffListView" Grid.Row="1" Grid.Column="1" SelectionMode="Single" Margin="10,0,10,10">
                         <!-- Hier definieren Sie das Aussehen Ihrer Listenelemente -->
                         <ListView.ItemTemplate>
                             <DataTemplate>
