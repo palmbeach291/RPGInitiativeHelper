@@ -14,23 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Ressourcen\Add1Leben.ico" />
-    <None Remove="Ressourcen\Add_24x24.ico" />
-    <None Remove="Ressourcen\Combat_24x24.ico" />
-    <None Remove="Ressourcen\Group_24x24.ico" />
-    <None Remove="Ressourcen\Icon_16x16.ico" />
-    <None Remove="Ressourcen\Icon_16x16_new.ico" />
-    <None Remove="Ressourcen\Icon_24x24_new.ico" />
-    <None Remove="Ressourcen\Icon_48x48.ico" />
-    <None Remove="Ressourcen\Info_24x24.ico" />
-    <None Remove="Ressourcen\Load_24x24.ico" />
-    <None Remove="Ressourcen\Minus1Leben.ico" />
-    <None Remove="Ressourcen\Minus_24x24.ico" />
-    <None Remove="Ressourcen\Next_24x24.ico" />
-    <None Remove="Ressourcen\Start_48x48.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\Licence.txt">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -42,21 +25,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Ressourcen\Add1Leben.ico" />
-    <Resource Include="Ressourcen\Add_24x24.ico" />
-    <Resource Include="Ressourcen\Combat_24x24.ico" />
-    <Resource Include="Ressourcen\Group_24x24.ico" />
-    <Resource Include="Ressourcen\Icon_16x16.ico" />
-    <Resource Include="Ressourcen\Icon_16x16_new.ico" />
-    <Resource Include="Ressourcen\Icon_24x24_new.ico" />
-    <Resource Include="Ressourcen\Icon_48x48.ico" />
-    <Resource Include="Ressourcen\Info_24x24.ico" />
-    <Resource Include="Ressourcen\Load_24x24.ico" />
-    <Resource Include="Ressourcen\Minus1Leben.ico" />
-    <Resource Include="Ressourcen\Minus_24x24.ico" />
-    <Resource Include="Ressourcen\Next_24x24.ico" />
-    <Resource Include="Ressourcen\Start_48x48.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Ressourcen\**\*" />
+	</ItemGroup>
 
 </Project>

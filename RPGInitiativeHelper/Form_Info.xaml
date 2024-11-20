@@ -1,7 +1,8 @@
 ﻿<Window x:Class="YourNamespace.InfoWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Informationen" Height="175" Width="270" Background="LightBlue">
+        Title="Informationen" Background="LightBlue" 
+        SizeToContent="WidthAndHeight">
 
     <Window.Resources>
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
@@ -12,7 +13,9 @@
     </Window.Resources>
     
     <Grid >
+        
         <StackPanel Margin="10">
+            <Image Source="Ressourcen\logo.png" Height="100" Width="100" Margin="0, 0, 0, 10"/>
             <TextBlock Text="E-Mail: palmbeach291@gmail.com" Margin="0, 0, 0, 5" Style="{DynamicResource TextBlockStyle}"/>
             <TextBlock Margin="0, 0, 0, 5" Style="{DynamicResource TextBlockStyle}">
                 Sourcen: <Hyperlink NavigateUri="https://github.com/palmbeach291/RPGInitiativeHelper" RequestNavigate="Hyperlink_RequestNavigate">

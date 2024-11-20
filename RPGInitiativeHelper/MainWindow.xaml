@@ -53,9 +53,6 @@
             <Button Click="NeueDatei_Click" ToolTip="Neuer Kampf">
                 <Image Source="/RPGInitiativeHelper;component/Ressourcen/Icon_24x24_new.ico" Width="32" Height="32"/>
             </Button>
-            <Button Click="SaveGroup_Click" ToolTip="Speicher Spieler">
-                <Image Source="/RPGInitiativeHelper;component/Ressourcen/Group_24x24.ico" Width="32" Height="32"/>
-            </Button>
             <Button Click="SaveCombatants_Click" ToolTip="Speicher gesamte Liste">
                 <Image Source="/RPGInitiativeHelper;component/Ressourcen/Combat_24x24.ico" Width="32" Height="32"/>
             </Button>
