@@ -869,8 +869,8 @@ namespace RPGInitiativeHelper
         private void Option_Click(object sender, RoutedEventArgs e)
         {
             Form_Configuration ConfigDiag = new Form_Configuration(configManager);
-
             ConfigDiag.ShowDialog();
+            configManager.SetSetting(ConfigDiag._configManager.MenuColor, ConfigDiag._configManager.BackgroundColor, ConfigDiag._configManager.FontSize, ConfigDiag._configManager.IsBold);
             PaintMe();
         }
 

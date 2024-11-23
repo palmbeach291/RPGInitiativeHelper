@@ -8,14 +8,28 @@ namespace RPGInitiativeHelper.Configuration
 {
     public partial class Form_Configuration : Window
     {
-        private ConfigManager _configManager;
-        BrushConverter brushConverter = new BrushConverter();
+        public ConfigManager _configManager =new ConfigManager();
+        public ConfigManager oldConfig;
+        private BrushConverter brushConverter = new BrushConverter();
+        private bool isInitialized = false;
+        private bool inUse = false;
 
         public Form_Configuration(ConfigManager configManager)
         {
             InitializeComponent();
+            isInitialized =true;
             LoadColorsIntoComboBoxes();
-            _configManager = configManager;
+            oldConfig= configManager;
+            setInitialConfig();
+        }
+
+        private void setInitialConfig()
+        {
+            _configManager.MenuColor = oldConfig.MenuColor;
+            _configManager.BackgroundColor = oldConfig.BackgroundColor;
+            _configManager.FontFamily = oldConfig.FontFamily;
+            _configManager.FontSize = oldConfig.FontSize;
+            _configManager.IsBold = oldConfig.IsBold;
             LoadConfig();
         }
 
@@ -52,7 +66,9 @@ namespace RPGInitiativeHelper.Configuration
         }
         private void LoadConfig()
         {
+            inUse = true;
             BoldCheckBox.IsChecked = _configManager.IsBold;
+            FontSizeNumericUpDown.Value= _configManager.FontSize;
 
             // Hole die aktuellen Farben aus dem Config-Manager als Color-Objekt
             var currentMenuColor = ((SolidColorBrush)_configManager.MenuColor).Color;
@@ -93,6 +109,7 @@ namespace RPGInitiativeHelper.Configuration
 
             FontSizeNumericUpDown.Value = _configManager.FontSize;
 
+            inUse= false;
             PaintMe();
         }
 
@@ -117,7 +134,7 @@ namespace RPGInitiativeHelper.Configuration
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-            LoadConfig();
+            setInitialConfig();
         }
 
         private void DefaultButton_Click(object sender, RoutedEventArgs e)
@@ -128,6 +145,8 @@ namespace RPGInitiativeHelper.Configuration
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+
+            setInitialConfig();
             this.Close();
         }
 
@@ -164,7 +183,7 @@ namespace RPGInitiativeHelper.Configuration
 
         private void ValuesChanged()
         {
-            if (_configManager != null)
+            if (_configManager != null && isInitialized && !inUse)
             {
                 if (BackgroundColorComboBox.SelectedItem != null)
                 {

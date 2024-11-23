@@ -45,8 +45,8 @@ namespace RPGInitiativeHelper.Configuration
 
         public void LoadDefault()
         {
-            MenuColor = Brushes.Blue;
-            BackgroundColor = Brushes.LightBlue;
+            MenuColor = Brushes.Red;
+            BackgroundColor = Brushes.LightCoral;
             FontSize = 14;
             IsBold = true;
             FontFamily = "Roboto";
@@ -68,7 +68,6 @@ namespace RPGInitiativeHelper.Configuration
                 // Logging oder Error Handling könnte hier erfolgen
                 Console.WriteLine($"Error loading config: {ex.Message}");
             }
-            SaveSettings();
         }
 
         public void SaveSettings()
