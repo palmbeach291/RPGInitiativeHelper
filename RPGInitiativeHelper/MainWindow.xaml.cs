@@ -45,6 +45,7 @@ namespace RPGInitiativeHelper
         private void NewCombat()
         {
             StopTimer();
+            CurrentTurn = 0;
             Combatants = new List<Fighter>();
             fighterListView.ItemsSource = Combatants;
             fighterMenu.Visibility = Visibility.Hidden;
@@ -636,12 +637,12 @@ namespace RPGInitiativeHelper
 
         private void RefreshPhaseButtons()
         {
-            bool fighterAvailable = Combatants.Count > 0;
+            Visibility visibility = Combatants.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
-            B_NextPhase.IsEnabled = fighterAvailable;
-            B_StartFight.IsEnabled = fighterAvailable;
-
+            B_NextPhase.Visibility = visibility;
+            B_StartFight.Visibility = visibility;
         }
+
 
         private void GetOneMana_Click(object sender, RoutedEventArgs e)
         {
@@ -881,6 +882,7 @@ namespace RPGInitiativeHelper
             Style newLabelStyle = new Style(typeof(Label));
             Style newTextBoxStyle = new Style(typeof(TextBox));
             Style newListViewStyle = new Style(typeof(ListView));
+            Style newButtonStyle = new Style(typeof(Button));
 
             newLabelStyle.Setters.Add(new Setter(Label.FontWeightProperty, configManager.IsBold ? FontWeights.Bold : FontWeights.Normal));
             newLabelStyle.Setters.Add(new Setter(Label.FontFamilyProperty, new FontFamily(configManager.FontFamily)));
@@ -905,6 +907,11 @@ namespace RPGInitiativeHelper
 
             // Ersetze den alten Style in den Ressourcen
             this.Resources["TextBoxStyle"] = newTextBoxStyle;
+
+            newButtonStyle.Setters.Add(new Setter(Button.BackgroundProperty, configManager.MenuColor));
+
+            // Ersetze den alten Style in den Ressourcen
+            this.Resources["ButtonStyle"] = newButtonStyle;
 
             // Optional: Layout aktualisieren
             this.UpdateLayout();
