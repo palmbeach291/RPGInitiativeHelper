@@ -689,9 +689,9 @@ namespace RPGInitiativeHelper
             return retval;
         }
 
-        private void SaveData(Func<List<Fighter>> dataSelector, string noDataMessage)
+        private void SaveData(Func<List<Fighter>> dataSelector, string noDataMessage, bool fromButton = false)
         {
-            if (!SaveStats())
+            if (!SaveStats() && !fromButton || Combatants.Count < 1)
             {
                 MessageBox.Show("Es wurde nicht gespeichert", "Warnung", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -723,12 +723,12 @@ namespace RPGInitiativeHelper
 
         private void SaveGroup_Click(object sender, RoutedEventArgs e)
         {
-            SaveData(() => Combatants.Where(f => f.PlayerName != "NPC").ToList(), "Es existieren keine Spielercharaktere.");
+            SaveData(() => Combatants.Where(f => f.PlayerName != "NPC").ToList(), "Es existieren keine Spielercharaktere.", true);
         }
 
         private void SaveCombatants_Click(object sender, RoutedEventArgs e)
         {
-            SaveData(() => Combatants, "Es existieren keine Kämpfer.");
+            SaveData(() => Combatants, "Es existieren keine Kämpfer.", true);
         }
 
         private void SaveSelectedFighter()
