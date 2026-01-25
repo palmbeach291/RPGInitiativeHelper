@@ -29,6 +29,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -39,22 +40,23 @@
         </Grid.ColumnDefinitions>
 
         <Label Content="Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-        <TextBox Name="TB_Name" Grid.Row="0" Grid.Column="1" >
-        </TextBox>
-            <Label Content="Dauer:" Grid.Row="1" Grid.Column="0"  Style="{DynamicResource LabelStyle}"/>
+        <TextBox Name="TB_Name" Grid.Row="0" Grid.Column="1"/>
+
+        <Label Content="Permanent:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+        <CheckBox Name="CB_Perm" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Click="PermCheckBox_Click"/>
+
+        <Label Name="L_Dauer" Content="Dauer:" Grid.Row="2" Grid.Column="0"  Style="{DynamicResource LabelStyle}"/>
         <xctk:IntegerUpDown Name="DurationNumericUpDown"
-                    Grid.Row="1" Grid.Column="1"
+                    Grid.Row="2" Grid.Column="1"
                     Minimum="1" Maximum="24" Value="1"/>
+        <Label Content="Bonus:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+        <Label Content="Malus:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
+        <RadioButton Name="RB_Boni" GroupName="BonusGroup" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <RadioButton Name="RB_Mali" GroupName="BonusGroup" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-        <!-- Schriftgröße -->
-        <Label Content="Bonus:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-        <Label Content="Malus:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-        <RadioButton Name="RB_Boni" GroupName="BonusGroup" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Height="14" Width="24"/>
-        <RadioButton Name="RB_Mali" GroupName="BonusGroup" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Height="14" Width="24"/>
-
-        <Label Content="Beschreibung:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Style="{DynamicResource LabelStyle}"/>
-        <TextBox Name="TB_Description" Grid.Row="5" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap"/>
-        <Button Content="Speichern" Grid.Row="6" Grid.Column="0" Click="SaveButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
-        <Button Content="Abbrechen" Grid.Row="6" Grid.Column="1" Click="CancelButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
+        <Label Content="Beschreibung:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Top"  Style="{DynamicResource LabelStyle}"/>
+        <TextBox Name="TB_Description" Grid.Row="6" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <Button Content="Speichern" Grid.Row="7" Grid.Column="0" Click="SaveButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
+        <Button Content="Abbrechen" Grid.Row="7" Grid.Column="1" Click="CancelButton_Click" Margin="5" Style="{DynamicResource ButtonStyle}"/>
     </Grid>
 </Window>

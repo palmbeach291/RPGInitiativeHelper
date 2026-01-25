@@ -23,7 +23,7 @@ namespace RPGInitiativeHelper
         public Form_FighterState(Fighter parent)
         {
             InitializeComponent();
-            fighterState = new FighterState(parent, "", 1);
+            fighterState = new FighterState(parent, "", false);
             InitialConfig();
         }
 
@@ -47,11 +47,16 @@ namespace RPGInitiativeHelper
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(TB_Name.Text) && DurationNumericUpDown.Value != null)
+            bool isPermanent = CB_Perm.IsChecked ?? false;
+            if (!string.IsNullOrWhiteSpace(TB_Name.Text) && (DurationNumericUpDown.Value != null || isPermanent))
             {
                 fighterState.name = TB_Name.Text;
                 fighterState.description = TB_Description.Text;
-                fighterState.rounds = (int)DurationNumericUpDown.Value;
+                fighterState.isPermanent = isPermanent;
+                if (!isPermanent)
+                {
+                    fighterState.rounds = (int)DurationNumericUpDown.Value;
+                }
                 fighterState.isBonus = (bool)this.RB_Boni.IsChecked;
 
                 this.DialogResult = true; // DialogResult setzen
@@ -63,6 +68,16 @@ namespace RPGInitiativeHelper
         {
             this.DialogResult = false; // DialogResult setzen
             this.Close();
+        }
+
+        private void PermCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            // Direkt den aktuellen Status der CheckBox verwenden
+            bool isChecked = CB_Perm.IsChecked ?? false;
+
+            // Die Elemente sollen deaktiviert werden, wenn die CheckBox aktiv ist
+            L_Dauer.IsEnabled = !isChecked;
+            DurationNumericUpDown.IsEnabled = !isChecked;
         }
 
         private void PaintMe()
