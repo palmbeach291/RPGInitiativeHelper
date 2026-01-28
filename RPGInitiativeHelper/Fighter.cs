@@ -50,7 +50,7 @@ namespace RPGInitiativeHelper
         {
             get
             {
-                return $"{Initiative} {Name} {Life}/{MaxLife}";
+                return $"{Initiative} | {Name} | {Id} | {Life}/{MaxLife}";
             }
         }
 

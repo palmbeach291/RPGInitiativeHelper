@@ -334,6 +334,7 @@ namespace RPGInitiativeHelper
             {
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
                 selectedFighter.Id = TB_Id.Text;
+                fighterListView.Items.Refresh();
             }
         }
 
@@ -819,10 +820,11 @@ namespace RPGInitiativeHelper
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
 
                 // Klonen des ausgewählten Kämpfers
-                Fighter clonedFighter = new Fighter(selectedFighter.Name + "_Klon",
+                Fighter clonedFighter = new Fighter(selectedFighter.Name,
                                                     selectedFighter.Initiative,
                                                     selectedFighter.Life)
                 {
+                    Id = selectedFighter.Id,
                     MaxLife = selectedFighter.MaxLife,
                     Armor = selectedFighter.Armor,
                     Defence = selectedFighter.Defence,
