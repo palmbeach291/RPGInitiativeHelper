@@ -64,15 +64,13 @@ namespace RPGInitiativeHelper
         {
             int count = 0;
             string name = "Kämpfer";
-            string newName = name;
 
-            while (fighterContained(newName))
+            while (fighterContained(name, count.ToString()))
             {
-                newName = name + "_" + count.ToString();
                 count++;
             }
 
-            AddFighter(new Fighter(newName, 1, 1));
+            AddFighter(new Fighter(name, 1, 1,count.ToString()));
         }
 
         private void AddFighter(Fighter fighter)
@@ -82,12 +80,12 @@ namespace RPGInitiativeHelper
             refreshInitiative();
         }
 
-        public bool fighterContained(string name)
+        public bool fighterContained(string name,string id)
         {
             bool retval = false;
 
             foreach (Fighter f in Combatants)
-                if (f.Name == name)
+                if (f.Name == name && f.Id == id)
                     retval = true;
 
             return retval;
@@ -289,6 +287,7 @@ namespace RPGInitiativeHelper
             {
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
                 TB_Name.Text = selectedFighter.Name;
+                TB_Id.Text = selectedFighter.Id;
                 TB_Initiative.Text = selectedFighter.Initiative.ToString();
                 TB_Max_Life.Text = selectedFighter.MaxLife.ToString();
                 TB_Current_Life.Text = selectedFighter.Life.ToString();
@@ -314,6 +313,11 @@ namespace RPGInitiativeHelper
             SaveName();
         }
 
+        private void TB_Id_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SaveId();
+        }
+
         private void SaveName()
         {
             if (fighterListView.SelectedItem != null)
@@ -321,6 +325,15 @@ namespace RPGInitiativeHelper
                 Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
                 selectedFighter.Name = TB_Name.Text;
                 fighterListView.Items.Refresh();
+            }
+        }
+
+        private void SaveId()
+        {
+            if (fighterListView.SelectedItem != null)
+            {
+                Fighter selectedFighter = (Fighter)fighterListView.SelectedItem;
+                selectedFighter.Id = TB_Id.Text;
             }
         }
 
@@ -681,6 +694,7 @@ namespace RPGInitiativeHelper
             if (ini && mLife && cLife && mMana && cMana && armor && defence && offence)
             {
                 SaveName();
+                SaveId();
                 SaveNotes();
                 SaveDamage();
                 retval = true;
